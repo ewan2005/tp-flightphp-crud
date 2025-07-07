@@ -5,6 +5,7 @@
 CREATE DATABASE etablissement;
 use etablissement;
 -- 1. TABLE ETABLISSEMENT FINANCIER
+
 CREATE TABLE ef_etablissement_financier (
     id_etablissement INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
@@ -25,7 +26,7 @@ CREATE TABLE ef_utilisateur (
     mot_de_passe VARCHAR(255) NOT NULL,
     role ENUM('admin', 'agent') NOT NULL,
     id_etablissement INT,
-    FOREIGN KEY (id_etablissement) REFERENCES etablissement_financier(id_etablissement)
+    FOREIGN KEY (id_etablissement) REFERENCES ef_etablissement_financier(id_etablissement)
 );
 
 -- 4. TABLE CLIENT (aucune dépendance)
@@ -45,7 +46,7 @@ CREATE TABLE ef_type_pret (
     montant_min DECIMAL(15,2) NOT NULL,
     montant_max DECIMAL(15,2) NOT NULL,
     id_etablissement INT NOT NULL,
-    FOREIGN KEY (id_etablissement) REFERENCES etablissement_financier(id_etablissement)
+    FOREIGN KEY (id_etablissement) REFERENCES ef_etablissement_financier(id_etablissement)
 );
 
 -- 6. TABLE PRET
@@ -58,10 +59,10 @@ CREATE TABLE ef_pret (
     date_demande DATE NOT NULL,
     id_statut INT NOT NULL,
     id_agent INT NOT NULL,
-    FOREIGN KEY (id_client) REFERENCES client(id_client),
-    FOREIGN KEY (id_type_pret) REFERENCES type_pret(id_type_pret),
-    FOREIGN KEY (id_statut) REFERENCES statut(id_statut),
-    FOREIGN KEY (id_agent) REFERENCES utilisateur(id_utilisateur)
+    FOREIGN KEY (id_client) REFERENCES ef_client(id_client),
+    FOREIGN KEY (id_type_pret) REFERENCES ef_type_pret(id_type_pret),
+    FOREIGN KEY (id_statut) REFERENCES ef_statut(id_statut),
+    FOREIGN KEY (id_agent) REFERENCES ef_utilisateur(id_utilisateur)
 );
 
 -- 7. TABLE VALIDATION DE PRET
@@ -71,8 +72,8 @@ CREATE TABLE ef_validation_pret (
     id_agent INT NOT NULL,
     date_validation DATETIME DEFAULT CURRENT_TIMESTAMP,
     commentaire TEXT,
-    FOREIGN KEY (id_pret) REFERENCES pret(id_pret),
-    FOREIGN KEY (id_agent) REFERENCES utilisateur(id_utilisateur)
+    FOREIGN KEY (id_pret) REFERENCES ef_pret(id_pret),
+    FOREIGN KEY (id_agent) REFERENCES ef_utilisateur(id_utilisateur)
 );
 
 -- 8. TABLE AJOUT FONDS
@@ -82,8 +83,8 @@ CREATE TABLE ef_ajout_fonds (
     montant DECIMAL(15,2) NOT NULL,
     date_ajout DATETIME DEFAULT CURRENT_TIMESTAMP,
     id_admin INT NOT NULL,
-    FOREIGN KEY (id_etablissement) REFERENCES etablissement_financier(id_etablissement),
-    FOREIGN KEY (id_admin) REFERENCES utilisateur(id_utilisateur)
+    FOREIGN KEY (id_etablissement) REFERENCES ef_etablissement_financier(id_etablissement),
+    FOREIGN KEY (id_admin) REFERENCES ef_utilisateur(id_utilisateur)
 );
 
 -- 9. INSERTION DE STATUTS PAR DÉFAUT
