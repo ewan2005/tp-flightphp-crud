@@ -43,6 +43,19 @@
         <button type="submit">Créer le type de prêt</button>
     </form>
 </div>
+<div>
+<h1>Liste des types pret</h1>
+
+<table id="type-pret">
+      <thead>
+      <tr>
+        <th>ID</th><th>ID Etablissement</th><th>Nom</th><th>Taux d’intérêt annuel</th><th>Durée maximale (en mois)</th><th>Montant minimum (Ar)</th><th>Montant maximum (Ar)</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+</div>
 <script>
     const apiBase = "http://localhost/tp-flightphp-crud/ws";
 
@@ -79,6 +92,33 @@
         }
       });
     }
+
+    function chargerTypesPret() {
+      ajax("GET", "/typePret", null, (res) => {
+        const tbody = document.querySelector("#type-pret tbody");
+        tbody.innerHTML = ""; // Vider le tableau avant de le remplir
+        if (res && res.length > 0) {
+          res.forEach(type => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${type.id_type_pret}</td>
+              <td>${type.id_etablissement}</td>
+              <td>${type.nom}</td>
+              <td>${type.taux_annuel}</td>
+              <td>${type.duree_max}</td>
+              <td>${type.montant_min}</td>
+              <td>${type.montant_max}</td>
+              <td><button onclick="supprimerTypePret(${type.id_type_pret})">Supprimer</button></td>
+            `;
+            tbody.appendChild(row);
+          });
+        } else {
+          tbody.innerHTML = "<tr><td colspan='8'>Aucun type de prêt trouvé</td></tr>";
+        }
+      });
+    }
+    window.onload = chargerTypesPret;
 </script>
+
 </body>
 </html>
