@@ -26,12 +26,11 @@ $user = $_SESSION['user'];
     <form id="pretForm" onsubmit="event.preventDefault(); ajouterOuModifierPret();">
         <input type="hidden" id="id_pret">
         <label>Client :</label>
-        <input type="number" id="id_client" required><br>
+        <select id="id_client" required></select><br>
         <label for="type_pret">Type de prêt</label>
         <select id="type_pret" name="type_pret" required>
           <option value="">Sélectionner un type de prêt</option>
         </select>
-
         <label>Montant :</label>
         <input type="number" id="montant" step="0.01" min="0" required><br>
         <label>Durée (mois) :</label>
@@ -39,11 +38,12 @@ $user = $_SESSION['user'];
         <label>Date de début :</label>
         <input type="date" id="date_demande" required><br>
         <label>Agent :</label>
-        <input type="number" id="id_agent" required><br>
+        <span id="agentField"></span><br>
         <button type="submit">Créer / Modifier le prêt</button>
         <button type="button" onclick="resetFormPret()">Annuler</button>
     </form>
     <div id="result"></div>
+    <div id="echeancier" style="margin:20px 0;"></div>
     <h3>Liste des Prêts</h3>
     <table border="1" id="table-prets">
         <thead>
@@ -81,8 +81,42 @@ function chargerTypesPretSelect() {
   });
 }
 
+function chargerClientsSelect() {
+  ajax("GET", "/clients", null, (data) => {
+    const select = document.getElementById("id_client");
+    select.innerHTML = '<option value="">Sélectionner un client</option>';
+    data.forEach(e => {
+      const option = document.createElement("option");
+      option.value = e.id;
+      option.textContent = e.nom + ' ' + e.prenom;
+      select.appendChild(option);
+    });
+  });
+}
+
+function chargerAgentField() {
+  const user = <?php echo json_encode($user); ?>;
+  const agentField = document.getElementById("agentField");
+  if (user.role === 'admin') {
+    ajax("GET", "/agents", null, (data) => {
+      let html = '<select id="id_agent" required><option value="">Sélectionner un agent</option>';
+      data.forEach(a => {
+        html += `<option value="${a.id_utilisateur}">${a.nom}</option>`;
+      });
+      html += '</select>';
+      agentField.innerHTML = html;
+    });
+  } else {
+    agentField.innerHTML = `<input type='text' id='id_agent' value='${user.id_utilisateur}' readonly style='background:#eee;' /> <b>${user.nom}</b>`;
+  }
+}
+
 // Appelle cette fonction au chargement de la page :
-window.onload = chargerTypesPretSelect;
+window.onload = function() {
+  chargerTypesPretSelect();
+  chargerClientsSelect();
+  chargerAgentField();
+};
 
 function chargerPrets() {
   ajax("GET", "/prets", null, (data) => {
@@ -117,18 +151,39 @@ function ajouterOuModifierPret() {
   const duree = document.getElementById("duree").value;
   const date_demande = document.getElementById("date_demande").value;
   const id_agent = document.getElementById("id_agent").value;
+  const resultDiv = document.getElementById("result");
+  const echeancierDiv = document.getElementById("echeancier");
 
   const data = `id_client=${id_client}&id_type_pret=${id_type_pret}&montant=${montant}&duree=${duree}&date_demande=${date_demande}&id_agent=${id_agent}`;
 
+  function afficherEcheancier(echeancier) {
+    if (!echeancier || echeancier.length === 0) { echeancierDiv.innerHTML = ""; return; }
+    let html = '<h4>Échéancier prévisionnel</h4><table border="1"><tr><th>#</th><th>Date</th><th>Montant</th></tr>';
+    echeancier.forEach(e => {
+      html += `<tr><td>${e.numero}</td><td>${e.date}</td><td>${e.montant} Ar</td></tr>`;
+    });
+    html += '</table>';
+    echeancierDiv.innerHTML = html;
+  }
+
   if (id) {
-    ajax("PUT", `/prets/${id}`, data, () => {
+    ajax("PUT", `/prets/${id}`, data, (res) => {
+      resultDiv.textContent = res.message || "Prêt modifié";
       resetFormPret();
       chargerPrets();
+      echeancierDiv.innerHTML = "";
     });
   } else {
-    ajax("POST", "/prets", data, () => {
-      resetFormPret();
-      chargerPrets();
+    ajax("POST", "/prets", data, (res) => {
+      if (res.success) {
+        resultDiv.innerHTML = `<span style='color:green;'>${res.message}</span>`;
+        afficherEcheancier(res.echeancier);
+        resetFormPret();
+        chargerPrets();
+      } else {
+        resultDiv.innerHTML = `<span style='color:red;'>${res.message || 'Erreur lors de la création du prêt'}</span>`;
+        afficherEcheancier(res.echeancier);
+      }
     });
   }
 }
@@ -136,11 +191,12 @@ function ajouterOuModifierPret() {
 function remplirFormPret(p) {
   document.getElementById("id_pret").value = p.id_pret;
   document.getElementById("id_client").value = p.id_client;
-  document.getElementById("id_type_pret").value = p.id_type_pret;
+  document.getElementById("type_pret").value = p.id_type_pret;
   document.getElementById("montant").value = p.montant;
   document.getElementById("duree").value = p.duree;
   document.getElementById("date_demande").value = p.date_demande;
-  document.getElementById("id_agent").value = p.id_agent;
+  if (document.getElementById("id_agent"))
+    document.getElementById("id_agent").value = p.id_agent;
 }
 
 function supprimerPret(id) {
@@ -154,11 +210,12 @@ function supprimerPret(id) {
 function resetFormPret() {
   document.getElementById("id_pret").value = "";
   document.getElementById("id_client").value = "";
-  document.getElementById("id_type_pret").value = "";
+  document.getElementById("type_pret").value = "";
   document.getElementById("montant").value = "";
   document.getElementById("duree").value = "";
   document.getElementById("date_demande").value = "";
-  document.getElementById("id_agent").value = "";
+  if (document.getElementById("id_agent"))
+    document.getElementById("id_agent").value = "";
 }
 
 chargerPrets();

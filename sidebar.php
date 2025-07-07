@@ -39,6 +39,14 @@
       </li>
     </ul>
     <ul class="menu-list">
+      <li>
+        <a href="ajout_client.php">
+          <span class="icon"><i class="mdi mdi-bank"></i></span>
+          <span class="menu-item-label">Ajouter client</span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu-list">
       <!-- autres éléments du menu -->
     </ul>
   </div>
