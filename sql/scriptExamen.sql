@@ -1,7 +1,3 @@
--- =========================================
--- SCRIPT DE BASE DE DONNEES POUR GESTION DE PRET BANCAIRE MULTI-ETABLISSEMENT
--- Réorganisé le 2025-07-07
--- =========================================
 CREATE DATABASE etablissement;
 use etablissement;
 -- 1. TABLE ETABLISSEMENT FINANCIER
@@ -65,6 +61,17 @@ CREATE TABLE ef_pret (
     FOREIGN KEY (id_agent) REFERENCES ef_utilisateur(id_utilisateur)
 );
 
+-- 6.7 Historique des fonds
+
+CREATE TABLE ef_historique_transaction(
+    id_pret INT AUTO_INCREMENT PRIMARY KEY,
+    id_etablissement INT NOT NULL,
+    montant DECIMAL(10,2),
+    description VARCHAR(100),
+    date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_etablissement) REFERENCES ef_etablissement_financier(id_etablissement)
+);
+
 -- 7. TABLE VALIDATION DE PRET
 CREATE TABLE ef_validation_pret (
     id_validation INT AUTO_INCREMENT PRIMARY KEY,
@@ -79,12 +86,12 @@ CREATE TABLE ef_validation_pret (
 -- 8. TABLE AJOUT FONDS
 CREATE TABLE ef_ajout_fonds (
     id_ajout INT AUTO_INCREMENT PRIMARY KEY,
-    id_etablissement INT NOT NULL,
+    id_utilisateur INT NOT NULL,
     montant DECIMAL(15,2) NOT NULL,
     date_ajout DATETIME DEFAULT CURRENT_TIMESTAMP,
-    id_admin INT NOT NULL,
     FOREIGN KEY (id_etablissement) REFERENCES ef_etablissement_financier(id_etablissement),
     FOREIGN KEY (id_admin) REFERENCES ef_utilisateur(id_utilisateur)
+    FOREIGN KEY (id_utilisateur) REFERENCES ef_etablissement_financier(id_etablissement)
 );
 
 -- 9. INSERTION DE STATUTS PAR DÉFAUT
