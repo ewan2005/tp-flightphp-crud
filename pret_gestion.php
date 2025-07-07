@@ -110,7 +110,7 @@ function chargerPrets() {
 function ajouterOuModifierPret() {
   const id = document.getElementById("id_pret").value;
   const id_client = document.getElementById("id_client").value;
-  const id_type_pret = document.getElementById("id_type_pret").value;
+  const id_type_pret = document.getElementById("type_pret").value;
   const montant = document.getElementById("montant").value;
   const duree = document.getElementById("duree").value;
   const date_demande = document.getElementById("date_demande").value;

@@ -33,7 +33,8 @@ CREATE TABLE ef_client (
     telephone VARCHAR(20)
 );
 
-
+INSERT INTO ef_client (nom, email, telephone) VALUES
+('Edouu', 'edou@gmail.com','+221772222222');
 
 -- 5. TABLE TYPE DE PRET
 CREATE TABLE ef_type_pret (
