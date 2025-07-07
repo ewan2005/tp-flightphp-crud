@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="css/main.css">
-  <title>Intérêts gagnés par mois</title>
+  <title>Intérêts gagnés par prêt</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     table { border-collapse: collapse; margin-top: 20px; }
@@ -14,7 +14,7 @@
 <body>
     <div class="main-section" style="max-width:1100px;width:95vw;min-height:70vh;">
       <?php include('sidebar.php'); ?>
-      <h2>Intérêts gagnés par mois</h2>
+      <h2>Détail des intérêts gagnés par prêt</h2>
       <form id="filtre-interets" style="width:100%;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:2rem;align-items:end;max-width:900px;margin:0 auto 2rem auto;">
         <div>
           <label for="mois_debut">Mois début:</label>
@@ -64,9 +64,24 @@
       </form>
       <table id="table-interets" class="table-centered" style="margin-top:2rem;">
         <thead>
-          <tr><th>Mois</th><th>Année</th><th>Intérêts gagnés</th></tr>
+          <tr>
+            <th>ID Prêt</th>
+            <th>ID Client</th>
+            <th>Montant</th>
+            <th>Durée (mois)</th>
+            <th>Date demande</th>
+            <th>Taux (%)</th>
+            <th>Intérêt gagné</th>
+          </tr>
         </thead>
         <tbody></tbody>
+        <tfoot>
+          <tr>
+            <th colspan="5">Total</th>
+            <th id="total-taux"></th>
+            <th id="total-interet"></th>
+          </tr>
+        </tfoot>
       </table>
       <canvas id="chart-interets" width="600" height="300"></canvas>
     </div>
@@ -91,19 +106,32 @@ document.getElementById('filtre-interets').onsubmit = function(e) {
   const mf = document.getElementById('mois_fin').value;
   const af = document.getElementById('annee_fin').value;
   ajax("GET", `/interets?mois_debut=${md}&annee_debut=${ad}&mois_fin=${mf}&annee_fin=${af}`, null, function(data) {
-    // Remplir le tableau
     const tbody = document.querySelector('#table-interets tbody');
+    let totalTaux = 0;
+    let totalInteret = 0;
     tbody.innerHTML = '';
     data.forEach(row => {
-      tbody.innerHTML += `<tr><td>${row.mois}</td><td>${row.annee}</td><td>${parseFloat(row.interet_gagne).toFixed(2)}</td></tr>`;
+      tbody.innerHTML += `<tr>
+        <td>${row.id_pret}</td>
+        <td>${row.id_client}</td>
+        <td>${parseFloat(row.montant).toFixed(2)}</td>
+        <td>${row.duree}</td>
+        <td>${row.date_demande}</td>
+        <td>${parseFloat(row.taux_annuel).toFixed(2)}</td>
+        <td>${parseFloat(row.interet_gagne).toFixed(2)}</td>
+      </tr>`;
+      totalTaux += parseFloat(row.taux_annuel);
+      totalInteret += parseFloat(row.interet_gagne);
     });
+    document.getElementById('total-taux').textContent = totalTaux.toFixed(2);
+    document.getElementById('total-interet').textContent = totalInteret.toFixed(2);
     // Afficher le graphique
     const ctx = document.getElementById('chart-interets').getContext('2d');
     if(window.interetChart) window.interetChart.destroy();
     window.interetChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: data.map(r => `${r.mois}/${r.annee}`),
+        labels: data.map(r => r.id_pret),
         datasets: [{
           label: 'Intérêts gagnés',
           data: data.map(r => r.interet_gagne),

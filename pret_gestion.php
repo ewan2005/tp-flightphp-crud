@@ -14,59 +14,40 @@ $user = $_SESSION['user'];
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <div class="main-section" style="max-width:1100px;width:95vw;min-height:70vh;">
-      <div style="background:#f2f2f2;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          Connecté en tant que <b><?= htmlspecialchars($user['nom']) ?></b> (<?= htmlspecialchars($user['role']) ?>)
-        </div>
-        <a href="logout.php" style="color:#fff;background:#d9534f;padding:6px 14px;border-radius:4px;text-decoration:none;">Déconnexion</a>
-      </div>
         <?php include('sidebar.php'); ?>
-        <h2>Gestion des Prêts</h2>
-        <form id="pretForm" onsubmit="event.preventDefault(); ajouterOuModifierPret();" style="width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;align-items:end;max-width:900px;margin:0 auto 2rem auto;">
-          <input type="hidden" id="id_pret">
-          <div>
-            <label>Client :</label>
-            <select id="id_client" required style="width:100%;"></select>
-          </div>
-          <div>
-            <label for="type_pret">Type de prêt</label>
-            <select id="type_pret" name="type_pret" required style="width:100%;">
-              <option value="">Sélectionner un type de prêt</option>
-            </select>
-          </div>
-          <div>
-            <label>Montant :</label>
-            <input type="number" id="montant" step="0.01" min="0" required style="width:100%;">
-          </div>
-          <div>
-            <label>Durée (mois) :</label>
-            <input type="number" id="duree" min="1" required style="width:100%;">
-          </div>
-          <div>
-            <label>Date de début :</label>
-            <input type="date" id="date_demande" required style="width:100%;">
-          </div>
-          <div>
-            <label>Agent :</label>
-            <input type="text" id="agent" style="width:100%;">
-          </div>
-          <div style="display:flex;align-items:end;height:100%;grid-column:span 3;">
-            <button type="submit" style="width:100%;">Ajouter/Modifier</button>
-          </div>
-        </form>
-        <div id="result"></div>
-        <div id="echeancier" style="margin:20px 0;"></div>
-        <h3>Liste des Prêts</h3>
-        <table border="1" id="table-prets">
-            <thead>
-                <tr>
-                    <th>ID</th><th>Client</th><th>Type</th><th>Montant</th><th>Durée</th><th>Date</th><th>Statut</th><th>Agent</th><th>Actions</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <script>
+
+    <h2>Gestion des Prêts</h2>
+    <form id="pretForm" onsubmit="event.preventDefault(); ajouterOuModifierPret();">
+        <input type="hidden" id="id_pret">
+        <label>Client :</label>
+        <select id="id_client" required></select><br>
+        <label for="type_pret">Type de prêt</label>
+        <select id="type_pret" name="type_pret" required>
+          <option value="">Sélectionner un type de prêt</option>
+        </select>
+        <label>Montant :</label>
+        <input type="number" id="montant" step="0.01" min="0" required><br>
+        <label>Durée (mois) :</label>
+        <input type="number" id="duree" min="1" required><br>
+        <label>Date de début :</label>
+        <input type="date" id="date_demande" required><br>
+        <label>Agent :</label>
+        <span id="agentField"></span><br>
+        <button type="submit">Créer / Modifier le prêt</button>
+        <button type="button" onclick="resetFormPret()">Annuler</button>
+    </form>
+    <div id="result"></div>
+    <div id="echeancier" style="margin:20px 0;"></div>
+    <h3>Liste des Prêts</h3>
+    <table border="1" id="table-prets">
+        <thead>
+            <tr>
+                <th>ID</th><th>Client</th><th>Type</th><th>Montant</th><th>Durée</th><th>Date</th><th>Statut</th><th>Agent</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script>
 const apiBase = "http://localhost/tp-flightphp-crud/ws";
 
 function ajax(method, url, data, callback) {
@@ -147,6 +128,7 @@ function chargerPrets() {
         <td>
           <button onclick='remplirFormPret(${JSON.stringify(p)})'>✏️</button>
           <button onclick='supprimerPret(${p.id_pret})'>🗑️</button>
+          <a href="ws/prets/${p.id_pret}/pdf" target="_blank" title="Télécharger PDF">📄 PDF</a>
         </td>
       `;
       tbody.appendChild(tr);

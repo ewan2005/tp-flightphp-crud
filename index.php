@@ -3,18 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>Connexion utilisateur</title>
+  <link rel="stylesheet" href="css/main.css">
   <style>
-    body { font-family: sans-serif; padding: 20px; }
-    input, button { margin: 5px; padding: 5px; }
-    .login-box { max-width: 350px; margin: 60px auto; border: 1px solid #ccc; padding: 30px; border-radius: 8px; }
-    .error { color: red; }
-    .success { color: green; }
-    .main-section { display: flex; justify-content: center; align-items: center; height: 100vh; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f3f4f6;
+    }
+    .main-section {
+      min-height: unset;
+      height: auto;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   </style>
 </head>
 <body>
-  <div class="main-section" style="max-width:500px;width:95vw;min-height:50vh;">
-    <?php include('sidebar.php'); ?>
+  <div class="main-section">
     <div class="login-box">
       <h2>Connexion</h2>
       <div id="message"></div>
