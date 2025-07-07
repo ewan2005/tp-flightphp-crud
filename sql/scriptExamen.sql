@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS etablissement;
 CREATE DATABASE etablissement;
 use etablissement;
 -- 1. TABLE ETABLISSEMENT FINANCIER

@@ -6,7 +6,7 @@ require_once __DIR__ . '/../controllers/typePretController.php';
 // });
 
 Flight::route('GET /typePret',['typePretController','getAll']);
-
+Flight::route('GET /typePret/@id/taux', ['typePretController','getTaux']);
 Flight::route('POST /typePret', function() {
     try {
         session_start();

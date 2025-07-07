@@ -16,6 +16,20 @@ class Controlleur1
         Flight::json(['message' => 'Fond ajouté', 'id' => $id]);
     }
 
+    public static function getAll() {
+        $model = Model1::getAll();
+        Flight::json($model);
+    }
+
+    public static function getTaux($id){
+        $taux = Model1::getTaux($id);
+        if ($taux) {
+            Flight::json(['taux_annuel' => $taux]);
+        } else {
+            Flight::halt(404, json_encode(['error' => 'Taux non trouvé pour cet ID']));
+        }
+    }
+
     public static function update($id) {
         $data = Flight::request()->data;
         $etab = Model1::getById($id);

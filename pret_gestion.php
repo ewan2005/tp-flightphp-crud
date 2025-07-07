@@ -13,6 +13,10 @@ $user = $_SESSION['user'];
     <title>Gestion des Prêts</title>
     <link rel="stylesheet" href="css/main.css">
 </head>
+<style>
+  .success { color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding: 8px; border-radius: 4px; }
+  .error { color: #721c24; background: #f8d7da; border: 1px solid #f5c6cb; padding: 8px; border-radius: 4px; }
+</style>
 <body>
     <div class="main-section" style="max-width:1100px;width:95vw;min-height:70vh;">
       <div style="background:#f2f2f2;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;">
@@ -51,17 +55,18 @@ $user = $_SESSION['user'];
             <label>Agent :</label>
             <input type="text" id="agent" style="width:100%;">
           </div> -->
-          <div style="display:flex;align-items:end;height:100%;grid-column:span 3;">
+          <!-- <div style="display:flex;align-items:end;height:100%;grid-column:span 3;">
             <button type="submit" style="width:100%;">Ajouter/Modifier</button>
-          </div>
+          </div> -->
+          <button type="button" onclick="simulerPret()">Simuler</button>
         </form>
-        <div id="result"></div>
+        <div id="result" style="margin: 10px 0;"></div>
         <div id="echeancier" style="margin:20px 0;"></div>
         <h3>Liste des Prêts</h3>
         <table border="1" id="table-prets">
             <thead>
                 <tr>
-                    <th>ID</th><th>Client</th><th>Type</th><th>Montant</th><th>Durée</th><th>Date</th><th>Statut</th><th>Agent</th><th>Actions</th>
+                    <th>ID</th><th>Client</th><th>Type</th><th>Montant</th><th>Durée</th><th>Date</th><th>Statut</th><th>Agent</th><th>Actions</th><th>taux</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -86,6 +91,24 @@ function ajax(method, url, data, callback) {
   xhr.send(data ? JSON.stringify(data) : null);
 }
 
+// function getTauxTypePret(id){
+//   ajax("GET", `/typePret/${id}/taux`, null, (data) => {
+//     return data.taux_annuel;
+//   });
+// }
+
+
+function afficherMessage(message, type = "success") {
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = `<div class="${type}">${message}</div>`;
+  resultDiv.style.opacity = 1;
+  // Disparition fluide après 3 secondes
+  setTimeout(() => {
+    resultDiv.style.transition = "opacity 0.5s";
+    resultDiv.style.opacity = 0;
+  }, 3000);
+}
+
 function chargerTypesPretSelect() {
   ajax("GET", "/typePret", null, (data) => {
     const select = document.getElementById("type_pret");
@@ -94,9 +117,34 @@ function chargerTypesPretSelect() {
       const option = document.createElement("option");
       option.value = t.id_type_pret;
       option.textContent = t.nom;
+      option.setAttribute("data-taux", t.taux_annuel); // Ajoute le taux ici
       select.appendChild(option);
     });
   });
+}
+
+function simulerPret(){ //hijerevena hoe somme que le client doit payer toute la duree du pret
+  const montant = parseFloat(document.getElementById("montant").value);
+  const duree = parseInt(document.getElementById("duree").value, 10);
+  const typePretSelect = document.getElementById("type_pret");
+  const selectedOption = typePretSelect.options[typePretSelect.selectedIndex];
+  const taux = parseFloat(selectedOption.getAttribute("data-taux")) || 0;
+
+  const tauxMensuel = taux / 100 / 12;
+  const mensualite = (montant * tauxMensuel) / (1- Math.pow(1+tauxMensuel,-duree));
+
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML=`
+    <div class="success">
+      <b>Simulation :</b><br>
+      Mensualité estimée : ${mensualite.toFixed(2)} Ar<br>
+      Coût total : ${(mensualite * duree).toFixed(2)} Ar<br>
+      Taux annuel : ${taux} %
+      <button onclick='ajouterOuModifierPret()'>Valider le pret</button>
+
+    </div>
+  `;
+
 }
 
 function chargerClientsSelect() {
