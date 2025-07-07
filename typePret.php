@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en" class="">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Créer un Type de Prêt</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Creer type pret</title>
+
+  <!-- Tailwind is included -->
+  <link rel="stylesheet" href="css/main.css?v=1628755089081">
+
     <style>
       .form-container { max-width: 400px; margin: 40px auto; border: 1px solid #ccc; padding: 30px; border-radius: 8px; }
       label, input { display: block; width: 100%; margin-bottom: 10px; }
@@ -13,6 +18,9 @@
     </style>
 </head>
 <body>
+
+    <?php include('sidebar.html'); ?>
+
 <div class="form-container">
     <h2>Créer un Type de Prêt</h2>
     <div id="message"></div>

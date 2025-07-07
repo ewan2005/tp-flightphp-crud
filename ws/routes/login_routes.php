@@ -9,9 +9,9 @@ Flight::route('POST /login', function() {
     Flight::json($result, $result['success'] ? 200 : 401);
 });
 
-Flight::route('GET /login', function() {
-    $data = ['message' => 'Bienvenue sur la page de connexion'];
-    Flight::render('login', $data);
-});
+// Flight::route('GET /login', function() {
+//     $data = ['message' => 'Bienvenue sur la page de connexion'];
+//     Flight::render('login', $data);
+// });
 
 ?>
