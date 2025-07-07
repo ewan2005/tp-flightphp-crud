@@ -50,4 +50,11 @@ class Pret {
         $stmt = $db->prepare("DELETE FROM ef_pret WHERE id_pret = ?");
         $stmt->execute([$id]);
     }
+
+    public static function clientHasPretActif($id_client) {
+        $db = getDB();
+        $stmt = $db->prepare("SELECT COUNT(*) FROM ef_pret WHERE id_client = ? AND id_statut IN (1,2)");
+        $stmt->execute([$id_client]);
+        return $stmt->fetchColumn() > 0;
+    }
 }
