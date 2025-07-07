@@ -29,8 +29,6 @@ CREATE TABLE ef_utilisateur (
 CREATE TABLE ef_client (
     id_client INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
-    prenom VARCHAR(100) NOT NULL,
-    date_naissance DATE NOT NULL,
     email VARCHAR(100) UNIQUE,
     telephone VARCHAR(20)
 );
