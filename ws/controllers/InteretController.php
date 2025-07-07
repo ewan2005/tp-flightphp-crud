@@ -9,4 +9,12 @@ class InteretController {
         $result = Interet::getInteretsParMois($mois_debut, $annee_debut, $mois_fin, $annee_fin);
         Flight::json($result);
     }
+    public static function getInteretsParMois() {
+        $mois_debut = intval(Flight::request()->query['mois_debut']);
+        $annee_debut = intval(Flight::request()->query['annee_debut']);
+        $mois_fin = intval(Flight::request()->query['mois_fin']);
+        $annee_fin = intval(Flight::request()->query['annee_fin']);
+        $result = Interet::getInteretsParMoisAgg($mois_debut, $annee_debut, $mois_fin, $annee_fin);
+        Flight::json($result);
+    }
 }
