@@ -20,6 +20,8 @@ $user = $_SESSION['user'];
       </div>
       <a href="logout.php" style="color:#fff;background:#d9534f;padding:6px 14px;border-radius:4px;text-decoration:none;">Déconnexion</a>
     </div>
+        <?php include('sidebar.php'); ?>
+
     <h2>Gestion des Prêts</h2>
     <form id="pretForm" onsubmit="event.preventDefault(); ajouterOuModifierPret();">
         <input type="hidden" id="id_pret">

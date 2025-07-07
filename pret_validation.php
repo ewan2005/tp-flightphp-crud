@@ -18,6 +18,8 @@ if ($_SESSION['user']['role'] !== 'admin') {
 </head>
 <body>
     <h2>Validation des Prêts (Admin)</h2>
+        <?php include('sidebar.php'); ?>
+
     <table border="1" id="table-prets-validation">
         <thead>
             <tr>
@@ -28,7 +30,7 @@ if ($_SESSION['user']['role'] !== 'admin') {
     </table>
     <div id="result"></div>
     <script>
-const apiBase = "http://localhost:8888/tp-flightphp-crud/ws";
+const apiBase = "http://localhost/tp-flightphp-crud/ws";
 
 function ajax(method, url, data, callback) {
   const xhr = new XMLHttpRequest();
