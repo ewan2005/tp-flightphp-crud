@@ -1,109 +1,38 @@
 <?php
 session_start();
 if (!isset($_SESSION['user'])) {
-    header('Location: login.php');
-    exit();
+  header('Location: login.php');
+  exit();
 }
+require_once 'ws/controllers/DashboardController.php';
+$stats = DashboardController::getStats();
+$nbClients = $stats['nbClients'];
+$nbPrets = $stats['nbPrets'];
+$montantTotal = $stats['montantTotal'];
+$interets = $stats['interets'];
 ?>
-
 <!DOCTYPE html>
 <html lang="en" class="">
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dashboard - Admin One Tailwind CSS Admin Dashboard</title>
-
-  <!-- Tailwind is included -->
+  <title>Dashboard</title>
   <link rel="stylesheet" href="css/main.css?v=1628755089081">
-
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"/>
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"/>
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"/>
-  <link rel="mask-icon" href="safari-pinned-tab.svg" color="#00b4b6"/>
-
-  <meta name="description" content="Admin One - free Tailwind dashboard">
-
-  <meta property="og:url" content="https://justboil.github.io/admin-one-tailwind/">
-  <meta property="og:site_name" content="JustBoil.me">
-  <meta property="og:title" content="Admin One HTML">
-  <meta property="og:description" content="Admin One - free Tailwind dashboard">
-  <meta property="og:image" content="https://justboil.me/images/one-tailwind/repository-preview-hi-res.png">
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="1920">
-  <meta property="og:image:height" content="960">
-
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:title" content="Admin One HTML">
-  <meta property="twitter:description" content="Admin One - free Tailwind dashboard">
-  <meta property="twitter:image:src" content="https://justboil.me/images/one-tailwind/repository-preview-hi-res.png">
-  <meta property="twitter:image:width" content="1920">
-  <meta property="twitter:image:height" content="960">
-
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-130795909-1"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'UA-130795909-1');
-  </script>
-
 </head>
+
 <body>
-
-<div id="app">
-
-<nav id="navbar-main" class="navbar is-fixed-top">
-  <div class="navbar-brand">
-    <a class="navbar-item mobile-aside-button">
-      <span class="icon"><i class="mdi mdi-forwardburger mdi-24px"></i></span>
-    </a>
-  </div>
-  <div class="navbar-brand is-right">
-    <a class="navbar-item --jb-navbar-menu-toggle" data-target="navbar-menu">
-      <span class="icon"><i class="mdi mdi-dots-vertical mdi-24px"></i></span>
-    </a>
-  </div>
-  
-  <div class="navbar-menu" id="navbar-menu">
-    <div class="navbar-end">
-    </div>
-  </div>
-</nav>
-
-    <?php include('sidebar.php'); ?>
-
-
-<section class="is-title-bar">
-  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-    <ul>
-      <li>Admin</li>
-      <li>Dashboard</li>
-    </ul>
-  </div>
-</section>
-
-<section class="is-hero-bar">
-  <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-    <h1 class="title">
-      Dashboar
-    </h1>
-  </div>
-</section>
-
-  <section class="section main-section">
-    <div class="grid gap-6 grid-cols-1 md:grid-cols-3 mb-6">
+  <?php include('sidebar.php'); ?>
+  <section class="section dashboard-section">
+    <h2 class="dashboard-title">Tableau de bord</h2>
+    <div class="dashboard-cards">
       <div class="card">
         <div class="card-content">
           <div class="flex items-center justify-between">
             <div class="widget-label">
-              <h3>
-                Clients
-              </h3>
-              <h1>
-                512
-              </h1>
+              <h3>Clients</h3>
+              <h1><?= $nbClients ?></h1>
             </div>
             <span class="icon widget-icon text-green-500"><i class="mdi mdi-account-multiple mdi-48px"></i></span>
           </div>
@@ -113,35 +42,36 @@ if (!isset($_SESSION['user'])) {
         <div class="card-content">
           <div class="flex items-center justify-between">
             <div class="widget-label">
-              <h3>
-                Sales
-              </h3>
-              <h1>
-                $7,770
-              </h1>
+              <h3>Prêts</h3>
+              <h1><?= $nbPrets ?></h1>
             </div>
-            <span class="icon widget-icon text-blue-500"><i class="mdi mdi-cart-outline mdi-48px"></i></span>
+            <span class="icon widget-icon text-blue-500"><i class="mdi mdi-cash-multiple mdi-48px"></i></span>
           </div>
         </div>
       </div>
-
       <div class="card">
         <div class="card-content">
           <div class="flex items-center justify-between">
             <div class="widget-label">
-              <h3>
-                Performance
-              </h3>
-              <h1>
-                256%
-              </h1>
+              <h3>Montant prêté</h3>
+              <h1><?= number_format($montantTotal, 2, ',', ' ') ?> Ar</h1>
             </div>
             <span class="icon widget-icon text-red-500"><i class="mdi mdi-finance mdi-48px"></i></span>
           </div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-content">
+          <div class="flex items-center justify-between">
+            <div class="widget-label">
+              <h3>Intérêts générés</h3>
+              <h1><?= number_format($interets, 2, ',', ' ') ?> Ar</h1>
+            </div>
+            <span class="icon widget-icon text-yellow-500"><i class="mdi mdi-percent mdi-48px"></i></span>
+          </div>
+        </div>
+      </div>
     </div>
-
     <div class="card mb-6">
       <header class="card-header">
         <p class="card-header-title">
@@ -153,99 +83,80 @@ if (!isset($_SESSION['user'])) {
         </a>
       </header>
       <div class="card-content">
-        <div class="chart-area">
-          <div class="h-full">
-            <div class="chartjs-size-monitor">
-              <div class="chartjs-size-monitor-expand">
-                <div></div>
-              </div>
-              <div class="chartjs-size-monitor-shrink">
-                <div></div>
-              </div>
-            </div>
-            <canvas id="big-line-chart" width="2992" height="1000" class="chartjs-render-monitor block" style="height: 400px; width: 1197px;"></canvas>
-          </div>
+        <div class="chart-area" style="max-width:600px;margin:0 auto;">
+          <canvas id="big-line-chart" height="220" style="max-width:100%;"></canvas>
         </div>
       </div>
     </div>
   </section>
-
-<div id="sample-modal" class="modal">
-  <div class="modal-background --jb-modal-close"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Sample modal</p>
-    </header>
-    <section class="modal-card-body">
-      <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-      <p>This is sample modal</p>
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button --jb-modal-close">Cancel</button>
-      <button class="button red --jb-modal-close">Confirm</button>
-    </footer>
-  </div>
-</div>
-
-<div id="sample-modal-2" class="modal">
-  <div class="modal-background --jb-modal-close"></div>
-  <div class="modal-card">
-    <header class="modal-card-head">
-      <p class="modal-card-title">Sample modal</p>
-    </header>
-    <section class="modal-card-body">
-      <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-      <p>This is sample modal</p>
-    </section>
-    <footer class="modal-card-foot">
-      <button class="button --jb-modal-close">Cancel</button>
-      <button class="button blue --jb-modal-close">Confirm</button>
-    </footer>
-  </div>
-</div>
-
-</div>
-
-<!-- Scripts below are for demo only -->
-<script type="text/javascript" src="js/main.min.js?v=1628755089081"></script>
-
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-<script type="text/javascript" src="js/chart.sample.min.js"></script>
-
-
-<script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '658339141622648');
-  fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=658339141622648&ev=PageView&noscript=1"/></noscript>
-
-<!-- Icons below are for demo only. Feel free to use any icon pack. Docs: https://bulma.io/documentation/elements/icon/ -->
-<link rel="stylesheet" href="https://cdn.materialdesignicons.com/4.9.95/css/materialdesignicons.min.css">
-
+  <!-- Scripts below are for demo only -->
+  <script type="text/javascript" src="js/main.min.js?v=1628755089081"></script>
+  <script type="text/javascript" src="js/chart.js"></script>
+  <script>
+    // Exemple de données dynamiques pour le dashboard
+    const ctx = document.getElementById('big-line-chart').getContext('2d');
+    const chartData = {
+      labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+      datasets: [
+        {
+          label: 'Clients',
+          data: [12, 19, 15, 22, 30, 25, 28, 32, 35, 40, 45, 50],
+          borderColor: '#1de9b6',
+          backgroundColor: 'rgba(29,233,182,0.1)',
+          fill: false,
+          tension: 0.3
+        },
+        {
+          label: 'Prêts',
+          data: [8, 14, 10, 18, 22, 20, 24, 27, 29, 33, 36, 38],
+          borderColor: '#2196f3',
+          backgroundColor: 'rgba(33,150,243,0.1)',
+          fill: false,
+          tension: 0.3
+        },
+        {
+          label: 'Montant prêté',
+          data: [1000, 2000, 1500, 3000, 3500, 3200, 4000, 4200, 4500, 4800, 5000, 5200],
+          borderColor: '#f44336',
+          backgroundColor: 'rgba(244,67,54,0.1)',
+          fill: false,
+          tension: 0.3
+        }
+      ]
+    };
+    new Chart(ctx, {
+      type: 'line',
+      data: chartData,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: true },
+          title: { display: true, text: 'Évolution annuelle', color: '#2a4d69', font: { size: 18 } }
+        },
+        scales: {
+          x: { title: { display: true, text: 'Mois', color: '#2a4d69' } },
+          y: { title: { display: true, text: 'Valeur', color: '#2a4d69' }, beginAtZero: true }
+        }
+      }
+    });
+  </script>
 </body>
+
 </html>
 
 
 <script>
-      const apiBase = "http://localhost:8888/tp-flightphp-crud/ws";
+  const apiBase = "http://localhost:8888/tp-flightphp-crud/ws";
 
-    function ajax(method, url, data, callback) {
-      const xhr = new XMLHttpRequest();
-      xhr.open(method, apiBase + url, true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-          callback(JSON.parse(xhr.responseText));
-        }
-      };
-      xhr.send(data);
-    }
+  function ajax(method, url, data, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, apiBase + url, true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        callback(JSON.parse(xhr.responseText));
+      }
+    };
+    xhr.send(data);
+  }
 </script>
