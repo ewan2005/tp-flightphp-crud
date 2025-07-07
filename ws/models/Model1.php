@@ -35,5 +35,13 @@ class Model1 {
         $stmt = $db->prepare("UPDATE ef_etablissement_financier SET solde = solde + ? WHERE id_etablissement = ?");
         $stmt->execute([$solde, (int)$id]);
     }
+    public static function getAllClient()
+    {
+        $db = getDB();
+        $stmt = $db->prepare("SELECT * FROM ef_client");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
 }

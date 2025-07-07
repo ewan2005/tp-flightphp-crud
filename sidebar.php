@@ -24,6 +24,14 @@
     </ul>
     <ul class="menu-list">
       <li>
+        <a href="remboursement.php">
+          <span class="icon"><i class="mdi mdi-bank"></i></span>
+          <span class="menu-item-label">rembource Prêts</span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu-list">
+      <li>
         <a href="typePret.php">
           <span class="icon"><i class="mdi mdi-bank"></i></span>
           <span class="menu-item-label">Types de Prêt</span>
