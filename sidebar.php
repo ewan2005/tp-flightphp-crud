@@ -8,7 +8,7 @@
   <div class="menu is-menu-main">
     <ul class="menu-list">
       <li class="active">
-        <a href="dashbord.php">
+        <a href="dashboard.php">
           <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
           <span class="menu-item-label">Dashboard</span>
         </a>
