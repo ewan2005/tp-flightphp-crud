@@ -26,7 +26,7 @@ if (!isset($_SESSION['user'])) {
 </head>
 <body>
 
-    <?php include('sidebar.html'); ?>
+    <?php include('sidebar.php'); ?>
 
 <div class="form-container">
     <h2>Créer un Type de Prêt</h2>

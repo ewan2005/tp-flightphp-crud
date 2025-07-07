@@ -72,7 +72,7 @@ if (!isset($_SESSION['user'])) {
   </div>
 </nav>
 
-    <?php include('sidebar.html'); ?>
+    <?php include('sidebar.php'); ?>
 
 
 <section class="is-title-bar">

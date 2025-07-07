@@ -27,7 +27,7 @@
     </ul>
   </div>
   <?php
-  session_start();
+  // session_start();
   if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
     echo '<div style="background:#f2f2f2;padding:10px 12px 10px 12px;margin-bottom:8px;border-radius:6px;display:flex;flex-direction:column;align-items:flex-start;">';
