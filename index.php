@@ -57,33 +57,15 @@
       <span class="icon"><i class="mdi mdi-dots-vertical mdi-24px"></i></span>
     </a>
   </div>
+  
   <div class="navbar-menu" id="navbar-menu">
     <div class="navbar-end">
     </div>
   </div>
 </nav>
 
-<aside class="aside is-placed-left is-expanded">
-  <div class="aside-tools">
-    <div>
-      Gestion <b class="font-black">Banquaire</b>
-    </div>
-  </div>
-  <div class="menu is-menu-main">
-    <ul class="menu-list">
-      <li class="active">
-        <a href="index.html">
-          <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
-          <span class="menu-item-label">Dashboard</span>
-        </a>
-      </li>
-    </ul>
-    <ul class="menu-list">
-    </ul>
-    <ul class="menu-list">
-    </ul>
-  </div>
-</aside>
+    <?php include('sidebar.html'); ?>
+
 
 <section class="is-title-bar">
   <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
@@ -97,7 +79,7 @@
 <section class="is-hero-bar">
   <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
     <h1 class="title">
-      Dashboard
+      Dashboar
     </h1>
   </div>
 </section>
@@ -242,3 +224,20 @@
 
 </body>
 </html>
+
+
+<script>
+      const apiBase = "http://localhost:8888/tp-flightphp-crud/ws";
+
+    function ajax(method, url, data, callback) {
+      const xhr = new XMLHttpRequest();
+      xhr.open(method, apiBase + url, true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          callback(JSON.parse(xhr.responseText));
+        }
+      };
+      xhr.send(data);
+    }
+</script>

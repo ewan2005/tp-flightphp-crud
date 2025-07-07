@@ -38,7 +38,6 @@
       xhr.send(data);
     }
 
-// ...dans login.php ou ton fichier JS...
   function login(event) {
     event.preventDefault();
     const email = document.getElementById("email").value;
@@ -50,7 +49,7 @@
     ajax("POST", "/login", data, (res) => {
       if (res.success) {
         messageDiv.innerHTML = "<span class='success'>Connexion réussie !</span>";
-        setTimeout(() => { window.location = "typePret"; }, 1000); // Redirection ici
+        setTimeout(() => { window.location = "index.php"; }, 1000); // Redirection ici
       } else {
         messageDiv.innerHTML = "<span class='error'>" + (res.message || "Erreur de connexion") + "</span>";
       }
