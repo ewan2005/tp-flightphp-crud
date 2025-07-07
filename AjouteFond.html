@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ajout de fonds</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2>Ajout de fonds</h2>
+
+    <label for="montant">Montant à ajouter :</label>
+    <input type="number" name="montant" id="montant">
+    <input type="button" onclick="return verification()" value="Valider">
+    <div id="erreur" style="color:red; margin-top:10px;"></div>
+    <div id="message" style="color:rgb(9, 101, 19); margin-top:10px;"></div>
+
+
+    <script>
+        const id = 1;
+        const apiBase = "http://localhost/tp-flightphp-crud/ws";
+
+        function ajax(method, url, data, callback) {
+            const xhr = new XMLHttpRequest();
+            xhr.open(method, apiBase + url, true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    callback(JSON.parse(xhr.responseText));
+                }
+            };
+            xhr.send(data);
+        }
+
+        function verification() {
+            const aff = document.getElementById("erreur");
+            const montant = document.getElementById("montant").value;
+            const date = new Date().toISOString().split('T')[0];
+
+            aff.innerHTML = "";
+
+            if (montant === "" || montant <= 0) {
+                aff.innerHTML = "Erreur ! Le montant doit être un nombre positif.";
+                return false;
+            }
+
+            insertFond(id, montant, date);
+        }
+
+        function insertFond(id, montant, date) {
+            const desc = "Ajout Fond";
+            if (id) {
+                const data1 = `id_utilisateur=${id}&montant=${montant}&date_ajout=${date}`;
+                const data2 = `solde=${montant}`;
+                const data3 = `id_utilisateur=${id}&montant=${montant}&description=${desc}&date=${date}`;
+
+                ajax("POST", "/addFond", data1, () => {
+                    ajax("POST", `/updateFond/${id}`, data2, () => {
+                        ajax("POST", "/addHistorique", data3, () => {
+                            succes();
+                        });
+                    });
+                });
+            }
+        }
+
+        function succes() {
+            document.getElementById("message").innerHTML = "Fonds enregistrés avec succès !";
+            document.getElementById("montant").value = "";
+        }
+    </script>
+</body>
+
+</html>

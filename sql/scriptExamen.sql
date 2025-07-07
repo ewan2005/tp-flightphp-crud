@@ -33,9 +33,6 @@ CREATE TABLE ef_client (
     telephone VARCHAR(20)
 );
 
-INSERT INTO ef_client (nom, email, telephone) VALUES
-('Edouu', 'edou@gmail.com','+221772222222');
-
 -- 5. TABLE TYPE DE PRET
 CREATE TABLE ef_type_pret (
     id_type_pret INT AUTO_INCREMENT PRIMARY KEY,
@@ -68,11 +65,11 @@ CREATE TABLE ef_pret (
 
 CREATE TABLE ef_historique_transaction(
     id_pret INT AUTO_INCREMENT PRIMARY KEY,
-    id_etablissement INT NOT NULL,
+    id_utilisateur INT NOT NULL,
     montant DECIMAL(10,2),
     description VARCHAR(100),
     date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_etablissement) REFERENCES ef_etablissement_financier(id_etablissement)
+    FOREIGN KEY (id_utilisateur) REFERENCES ef_utilisateur(id_utilisateur)
 );
 
 -- 7. TABLE VALIDATION DE PRET
@@ -92,8 +89,6 @@ CREATE TABLE ef_ajout_fonds (
     id_utilisateur INT NOT NULL,
     montant DECIMAL(15,2) NOT NULL,
     date_ajout DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_etablissement) REFERENCES ef_etablissement_financier(id_etablissement),
-    FOREIGN KEY (id_admin) REFERENCES ef_utilisateur(id_utilisateur)
     FOREIGN KEY (id_utilisateur) REFERENCES ef_etablissement_financier(id_etablissement)
 );
 
@@ -106,6 +101,8 @@ INSERT INTO ef_statut (libelle) VALUES
 -- 1. Établissement Financier
 INSERT INTO ef_etablissement_financier (nom, solde)
 VALUES ('EFI Bank', 10000000.00);
+
+
 
 -- Supposons que l’ID généré est 1
 -- 2. Administrateur
