@@ -24,7 +24,7 @@ class Pret {
             $data->montant,
             $data->duree,
             $data->date_demande,
-            1, // En attente
+            2, // En attente
             $data->id_agent
         ]);
         return $db->lastInsertId();
