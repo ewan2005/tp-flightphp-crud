@@ -22,6 +22,14 @@
         </a>
       </li>
     </ul>
+      <ul class="menu-list">
+      <li>
+        <a href="pret_gestion.php">
+          <span class="icon"><i class="mdi mdi-bank"></i></span>
+          <span class="menu-item-label">Gestion des Prêts</span>
+        </a>
+      </li>
+    </ul>
     <ul class="menu-list">
       <!-- autres éléments du menu -->
     </ul>
