@@ -32,13 +32,21 @@ if ($_SESSION['user']['role'] !== 'admin') {
     <script>
 const apiBase = "http://localhost/tp-flightphp-crud/ws";
 
-function ajax(method, url, data, callback) {
+function ajax(method, url, data, callback, isJson = false) {
   const xhr = new XMLHttpRequest();
   xhr.open(method, apiBase + url, true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  if (isJson) {
+    xhr.setRequestHeader("Content-Type", "application/json");
+  } else {
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  }
   xhr.onreadystatechange = () => {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      callback(JSON.parse(xhr.responseText));
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        callback(JSON.parse(xhr.responseText));
+      } else {
+        document.getElementById('result').textContent = 'Erreur serveur: ' + xhr.status;
+      }
     }
   };
   xhr.send(data);
@@ -70,21 +78,27 @@ function chargerPretsValidation() {
 }
 
 function validerPret(id) {
-  const id_admin = prompt("ID admin :");
-  if (!id_admin) return;
-  ajax("PUT", `/prets/${id}`, `id_statut=2&id_admin=${id_admin}`, (res) => {
-    document.getElementById('result').textContent = res.message || 'Prêt validé';
-    chargerPretsValidation();
+  ajax("GET", `/prets/${id}`, null, (pret) => {
+    pret.id_statut = 2;
+    pret.id_agent = pret.id_agent || 1; // Remplacer par l'ID agent réel si besoin
+    ajax("PUT", `/prets/${id}`, JSON.stringify(pret), (res) => {
+      document.getElementById('result').textContent = res.message || 'Prêt validé';
+      chargerPretsValidation();
+    }, true);
   });
 }
 
 function rejeterPret(id) {
-  const id_admin = prompt("ID admin :");
   const motif = prompt("Motif du rejet :");
-  if (!id_admin || !motif) return;
-  ajax("PUT", `/prets/${id}`, `id_statut=3&id_admin=${id_admin}&motif_rejet=${encodeURIComponent(motif)}`, (res) => {
-    document.getElementById('result').textContent = res.message || 'Prêt rejeté';
-    chargerPretsValidation();
+  if (!motif) return;
+  ajax("GET", `/prets/${id}`, null, (pret) => {
+    pret.id_statut = 3;
+    pret.motif_rejet = motif;
+    pret.id_agent = pret.id_agent || 1; // Remplacer par l'ID agent réel si besoin
+    ajax("PUT", `/prets/${id}`, JSON.stringify(pret), (res) => {
+      document.getElementById('result').textContent = res.message || 'Prêt rejeté';
+      chargerPretsValidation();
+    }, true);
   });
 }
 

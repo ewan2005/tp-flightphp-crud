@@ -28,10 +28,7 @@ class PretController {
             return;
         }
         // 2. Vérifier qu'il n'y a pas déjà un prêt actif pour ce client
-        if (Pret::clientHasPretActif($data->id_client)) {
-            Flight::json(['success'=>false, 'message'=>'Ce client a déjà un prêt actif non remboursé'], 400);
-            return;
-        }
+        // (Suppression de la restriction : un client peut avoir plusieurs prêts actifs)
         // 3. Vérifier les fonds de l'établissement
         $solde = Etablissement::getSolde($typePret['id_etablissement']);
         if ($solde < $data->montant) {
@@ -56,5 +53,33 @@ class PretController {
     public static function delete($id) {
         Pret::delete($id);
         Flight::json(['message' => 'Prêt supprimé']);
+    }
+
+    public static function valider($id) {
+        $id_admin = Flight::request()->data->id_admin;
+        // Récupérer le prêt
+        $pret = Pret::getById($id);
+        if (!$pret) {
+            Flight::json(['success'=>false, 'message'=>'Prêt introuvable'], 404);
+            return;
+        }
+        // Récupérer le type de prêt
+        $typePret = TypePret::getById($pret['id_type_pret']);
+        if (!$typePret) {
+            Flight::json(['success'=>false, 'message'=>'Type de prêt introuvable'], 404);
+            return;
+        }
+        // Débiter l'établissement
+        Etablissement::debiter($typePret['id_etablissement'], $pret['montant']);
+        // Valider le prêt
+        Pret::valider($id, $id_admin);
+        Flight::json(['message' => 'Prêt validé et fonds débités']);
+    }
+
+    public static function rejeter($id) {
+        $id_admin = Flight::request()->data->id_admin;
+        $motif = Flight::request()->data->motif_rejet;
+        Pret::rejeter($id, $id_admin, $motif);
+        Flight::json(['message' => 'Prêt rejeté']);
     }
 }

@@ -9,6 +9,7 @@ require 'routes/Route1.php';
 require 'routes/client_routes.php';
 require 'routes/agent_routes.php';
 require 'routes/client_routes.php';
+require 'routes/interet_routes.php';
 
 
 Flight::start();

@@ -59,13 +59,18 @@ const apiBase = "http://localhost/tp-flightphp-crud/ws";
 function ajax(method, url, data, callback) {
   const xhr = new XMLHttpRequest();
   xhr.open(method, apiBase + url, true);
-  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  if (data) {
+    xhr.setRequestHeader("Content-Type", "application/json");
+  }
   xhr.onreadystatechange = () => {
     if (xhr.readyState === 4 && xhr.status === 200) {
       callback(JSON.parse(xhr.responseText));
+    } else if (xhr.readyState === 4 && xhr.status !== 200) {
+      // Affiche l'erreur dans la console pour debug
+      console.error(xhr.responseText);
     }
   };
-  xhr.send(data);
+  xhr.send(data ? JSON.stringify(data) : null);
 }
 
 function chargerTypesPretSelect() {
@@ -87,8 +92,8 @@ function chargerClientsSelect() {
     select.innerHTML = '<option value="">Sélectionner un client</option>';
     data.forEach(e => {
       const option = document.createElement("option");
-      option.value = e.id;
-      option.textContent = e.nom + ' ' + e.prenom;
+      option.value = e.id_client;
+      option.textContent = e.nom + (e.prenom ? (' ' + e.prenom) : '');
       select.appendChild(option);
     });
   });
@@ -110,13 +115,6 @@ function chargerAgentField() {
     agentField.innerHTML = `<input type='text' id='id_agent' value='${user.id_utilisateur}' readonly style='background:#eee;' /> <b>${user.nom}</b>`;
   }
 }
-
-// Appelle cette fonction au chargement de la page :
-window.onload = function() {
-  chargerTypesPretSelect();
-  chargerClientsSelect();
-  chargerAgentField();
-};
 
 function chargerPrets() {
   ajax("GET", "/prets", null, (data) => {
@@ -154,7 +152,14 @@ function ajouterOuModifierPret() {
   const resultDiv = document.getElementById("result");
   const echeancierDiv = document.getElementById("echeancier");
 
-  const data = `id_client=${id_client}&id_type_pret=${id_type_pret}&montant=${montant}&duree=${duree}&date_demande=${date_demande}&id_agent=${id_agent}`;
+  const data = {
+    id_client,
+    id_type_pret,
+    montant,
+    duree,
+    date_demande,
+    id_agent
+  };
 
   function afficherEcheancier(echeancier) {
     if (!echeancier || echeancier.length === 0) { echeancierDiv.innerHTML = ""; return; }
@@ -218,7 +223,13 @@ function resetFormPret() {
     document.getElementById("id_agent").value = "";
 }
 
-chargerPrets();
-    </script>
+// Charger tous les éléments nécessaires au chargement de la page
+window.onload = function() {
+  chargerTypesPretSelect();
+  chargerClientsSelect();
+  chargerAgentField();
+  chargerPrets();
+};
+</script>
 </body>
 </html>

@@ -92,6 +92,15 @@ CREATE TABLE ef_ajout_fonds (
     FOREIGN KEY (id_utilisateur) REFERENCES ef_etablissement_financier(id_etablissement)
 );
 
+CREATE TABLE ef_echeancier (
+    id_echeancier INT AUTO_INCREMENT PRIMARY KEY,
+    id_pret INT NOT NULL,
+    numero_echeance INT NOT NULL,
+    date_echeance DATE NOT NULL,
+    montant DECIMAL(15,2) NOT NULL,
+    FOREIGN KEY (id_pret) REFERENCES ef_pret(id_pret)
+);
+
 -- 9. INSERTION DE STATUTS PAR DÉFAUT
 INSERT INTO ef_statut (libelle) VALUES
 ('En attente'),

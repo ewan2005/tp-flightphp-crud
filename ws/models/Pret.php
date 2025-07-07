@@ -57,4 +57,17 @@ class Pret {
         $stmt->execute([$id_client]);
         return $stmt->fetchColumn() > 0;
     }
+
+    public static function valider($id, $id_admin) {
+        $db = getDB();
+        $stmt = $db->prepare("UPDATE ef_pret SET id_statut = 2, id_agent = ? WHERE id_pret = ?");
+        $stmt->execute([$id_admin, $id]);
+    }
+
+    public static function rejeter($id, $id_admin, $motif) {
+        $db = getDB();
+        $stmt = $db->prepare("UPDATE ef_pret SET id_statut = 3, id_agent = ? WHERE id_pret = ?");
+        $stmt->execute([$id_admin, $id]);
+        // Optionnel : enregistrer le motif dans une table historique ou commentaire
+    }
 }
