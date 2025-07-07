@@ -9,6 +9,8 @@
     table { border-collapse: collapse; width: 100%; margin-top: 20px; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
     th { background-color: #f2f2f2; }
+    .success { color: green; }
+    .error { color: red; }
   </style>
 </head>
 <body>
@@ -23,6 +25,8 @@
     <input type="number" id="age" placeholder="Âge">
     <button onclick="ajouterOuModifier()">Ajouter / Modifier</button>
   </div>
+
+  <div id="message" style="margin:1rem 0;"></div>
 
   <table id="table-etudiants">
     <thead>
@@ -70,6 +74,12 @@
       });
     }
 
+    function showMessage(msg, type) {
+      const messageDiv = document.getElementById("message");
+      messageDiv.innerHTML = `<div class="${type}">${msg}</div>`;
+      setTimeout(() => { messageDiv.innerHTML = ""; }, 3000);
+    }
+
     function ajouterOuModifier() {
       const id = document.getElementById("id").value;
       const nom = document.getElementById("nom").value;
@@ -77,15 +87,21 @@
       const email = document.getElementById("email").value;
       const age = document.getElementById("age").value;
 
-      const data = `nom=${encodeURIComponent(nom)}&prenom=${encodeURIComponent(prenom)}&email=${encodeURIComponent(email)}&age=${age}`;
+      if (!nom || !prenom || !email || !age) {
+        showMessage("Veuillez remplir tous les champs.", "error");
+        return;
+      }
 
+      const data = `nom=${encodeURIComponent(nom)}&prenom=${encodeURIComponent(prenom)}&email=${encodeURIComponent(email)}&age=${age}`;
       if (id) {
         ajax("PUT", `/etudiants/${id}`, data, () => {
+          showMessage("Étudiant modifié avec succès !", "success");
           resetForm();
           chargerEtudiants();
         });
       } else {
         ajax("POST", "/etudiants", data, () => {
+          showMessage("Étudiant ajouté avec succès !", "success");
           resetForm();
           chargerEtudiants();
         });
@@ -103,6 +119,7 @@
     function supprimerEtudiant(id) {
       if (confirm("Supprimer cet étudiant ?")) {
         ajax("DELETE", `/etudiants/${id}`, null, () => {
+          showMessage("Étudiant supprimé avec succès !", "success");
           chargerEtudiants();
         });
       }

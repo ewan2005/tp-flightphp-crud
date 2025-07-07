@@ -35,6 +35,7 @@
           <button type="submit" style="width:100%;">Ajouter</button>
         </div>
       </form>
+      <div id="message" style="margin-bottom:1rem;"></div>
       <table class="table-centered" style="margin-top:2rem;">
         <thead>
           <tr>
@@ -69,6 +70,11 @@
       xhr.send(data);
     }
 
+    function showMessage(msg, type) {
+        const messageDiv = document.getElementById("message");
+        messageDiv.innerHTML = `<div class="${type}">${msg}</div>`;
+    }
+
     function ajouterClient(event){
         event.preventDefault();
         const nom = document.getElementById("nom").value;
@@ -80,10 +86,11 @@
         const data = `nom=${encodeURIComponent(nom)}&prenom=${encodeURIComponent(prenom)}&date_naissance=${encodeURIComponent(date_naissance)}&email=${encodeURIComponent(email)}&telephone=${encodeURIComponent(telephone)}`;
         ajax("POST", "/clients", data, (res, status) => {
             if (status === 200 && res.success) {
-                alert("Client ajouté avec succès !");
+                showMessage("Client ajouté avec succès !", "success");
                 //window.location.href = "profil_client.php";
+                chargerClients();
             } else {
-                alert("Erreur lors de l'ajout du client : " + (res.message || "Erreur inconnue"));
+                showMessage("Erreur lors de l'ajout du client : " + (res.message || "Erreur inconnue"), "error");
             }
         });
     }

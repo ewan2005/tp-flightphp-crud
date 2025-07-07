@@ -14,39 +14,17 @@ $id = $_SESSION['user']['id_utilisateur'];
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Remboursement</title>
     <link rel="stylesheet" href="css/main.css?v=1628755089081">
-    <style>
-        .form-container {
-            max-width: 400px;
-            margin: 40px auto;
-            border: 1px solid #ccc;
-            padding: 30px;
-            border-radius: 8px;
-        }
-        label, input, select {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        button, input[type="submit"] {
-            padding: 8px 16px;
-        }
-        .success { color: green; }
-        .error { color: red; }
-    </style>
 </head>
 <body>
 <?php include('sidebar.php'); ?>
-<div style="margin-left: 250px; width: 500px;">
-    <h2>Remboursement :</h2>
+<div class="main-section">
+    <h2>Remboursement</h2>
     <form id="remboursementForm">
-        <div id="sectionUser"></div>
-        <br>
-        <div id="sectionPret"></div>
-        <br>
-        <div id="sectionMontant"></div>
-        <br>
-        <input type="submit" value="Valider">
-        <div id="okey"></div>
+        <div id="sectionUser" style="min-width:220px;flex:1 1 220px;"></div>
+        <div id="sectionPret" style="min-width:220px;flex:1 1 220px;"></div>
+        <div id="sectionMontant" style="min-width:220px;flex:1 1 220px;"></div>
+        <button type="submit" class="button" style="margin-top:1rem;min-width:180px;">Valider</button>
+        <div id="okey" style="width:100%;margin-top:1rem;"></div>
     </form>
 </div>
 
@@ -82,7 +60,7 @@ function remboursement(event) {
     const montant = document.querySelector("input[name='montant']").value;
 
     if (!idClient || !idPret || !montant) {
-        alert("Veuillez remplir tous les champs !");
+        document.getElementById("okey").innerHTML = '<div class="error">Veuillez remplir tous les champs !</div>';
         return;
     }
 
@@ -91,7 +69,6 @@ function remboursement(event) {
     ajax("POST", "/traitement_annuite", data, (response) => {
         if (response.success) {
             document.getElementById("okey").innerHTML = `<div class="success">${response.message}</div>`;
-            
         } else {
             document.getElementById("okey").innerHTML = `<div class="error">${response.error}</div>`;
         }

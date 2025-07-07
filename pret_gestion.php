@@ -245,7 +245,7 @@ function ajouterOuModifierPret() {
 
   if (id) {
     ajax("PUT", `/prets/${id}`, data, (res) => {
-      resultDiv.textContent = res.message || "Prêt modifié";
+      afficherMessage(res.message || "Prêt modifié", res.success ? "success" : "error");
       resetFormPret();
       chargerPrets();
       echeancierDiv.innerHTML = "";
@@ -253,12 +253,12 @@ function ajouterOuModifierPret() {
   } else {
     ajax("POST", "/prets", data, (res) => {
       if (res.success) {
-        resultDiv.innerHTML = `<span style='color:green;'>${res.message}</span>`;
+        afficherMessage(res.message, "success");
         afficherEcheancier(res.echeancier);
         resetFormPret();
         chargerPrets();
       } else {
-        resultDiv.innerHTML = `<span style='color:red;'>${res.message || 'Erreur lors de la création du prêt'}</span>`;
+        afficherMessage(res.message || 'Erreur lors de la création du prêt', "error");
         afficherEcheancier(res.echeancier);
       }
     });

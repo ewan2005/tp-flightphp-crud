@@ -35,8 +35,8 @@ $id = $_SESSION['user']['id_utilisateur'];
                 <button type="button" onclick="return verification()" class="btn-primary">
                     <i class="fas fa-check-circle mr-1"></i> Valider
                 </button>
-                <div id="erreur" class="alert alert-error" style="display: none;"></div>
-                <div id="message" class="alert alert-success" style="display: none;"></div>
+                <div id="message" class="success" style="display: none;"></div>
+                <div id="erreur" class="error" style="display: none;"></div>
             </div>
         </div>
         <div class="card" style="margin:2rem 0 0 0;max-width:100%;">
@@ -119,6 +119,7 @@ $id = $_SESSION['user']['id_utilisateur'];
         function succes() {
             const successDiv = document.getElementById("message");
             successDiv.innerHTML = "<i class='fas fa-check-circle mr-1'></i> Fonds enregistrés avec succès !";
+            successDiv.className = "success";
             successDiv.style.display = "block";
             document.getElementById("montant").value = "";
             setTimeout(() => {

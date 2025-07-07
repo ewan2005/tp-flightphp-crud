@@ -146,6 +146,7 @@ if (!isset($_SESSION['user'])) {
   <?php include('sidebar.php'); ?>
   
   <div class="content-wrapper">
+    <div id="message" style="max-width:800px;margin:0 auto 1rem auto;"></div>
     <div class="client-card">
       <div class="client-header">
         <h1 class="client-title">
@@ -184,6 +185,11 @@ if (!isset($_SESSION['user'])) {
         }
       };
       xhr.send(data);
+    }
+
+    function showMessage(msg, type) {
+      const messageDiv = document.getElementById("message");
+      messageDiv.innerHTML = `<div class="${type}">${msg}</div>`;
     }
 
     function chargerProfilClient(id) {
@@ -239,7 +245,7 @@ if (!isset($_SESSION['user'])) {
           document.getElementById("lien-pret").href = `pret_gestion.php?id_client=${client.id_client}`;
           
         } else {
-          // Affichage d'un message d'erreur plus élégant
+          showMessage("Erreur lors du chargement du profil client", "error");
           const detailsContainer = document.getElementById("client-details");
           detailsContainer.innerHTML = `
             <div class="info-item" style="grid-column: span 2;">
