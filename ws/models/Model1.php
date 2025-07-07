@@ -10,18 +10,6 @@ class Model1 {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public static function getAll() {
-        $db = getDB();
-        $stmt = $db->query("SELECT * FROM ef_etablissement_financier");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    public static function getHistorique() {
-        $db = getDB();
-        $stmt = $db->query("SELECT * FROM ef_historique_transaction");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
     public static function create($data) {
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO ef_ajout_fonds (id_utilisateur, montant, date_ajout) VALUES (?, ?, ?)");
@@ -54,6 +42,55 @@ class Model1 {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public static function getAllPretNonFait($id)
+    {
+        $db = getDB();
+        $stmt = $db->prepare("
+            SELECT 
+                ep.id_pret,
+                ep.id_client,
+                ep.montant,
+                ep.duree,
+                ep.date_demande,
+                ec.id_echeance,
+                ec.mois_numero,
+                ec.date_echeance,
+                ec.montant_annuite,
+                ec.part_interet,
+                ec.part_capital,
+                ec.reste_a_payer,
+                ec.est_paye
+            FROM ef_pret ep
+            LEFT JOIN ef_echeance_pret ec ON ep.id_pret = ec.id_pret
+            WHERE ep.id_client = ?
+            AND (ec.est_paye = FALSE OR ec.est_paye IS NULL)
+            ORDER BY ep.id_pret, ec.mois_numero
+        ");
+        $stmt->execute([$id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
+    public static function getAllEcheance($id)
+    {
+        $db = getDB();
+        $stmt = $db->prepare("SELECT * FROM ef_echeance_pret WHERE id_pret = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } 
 
+    public static function annuiter($idPret) 
+    {
+        $db = getDB();
+        $stmt = $db->prepare("SELECT montant, duree FROM ef_pret WHERE id_pret = ?");
+        $stmt->execute([$idPret]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function getInfoPret($idPret)
+    {
+        $db = getDB();
+        $stmt = $db->prepare("SELECT montant, duree, date_demande FROM ef_pret WHERE id_pret = ?");
+        $stmt->execute([$idPret]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } 
 }

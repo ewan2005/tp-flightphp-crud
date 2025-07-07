@@ -64,6 +64,31 @@ CREATE TABLE ef_pret (
     FOREIGN KEY (id_agent) REFERENCES ef_utilisateur(id_utilisateur)
 );
 
+--reboursement
+CREATE TABLE ef_echeance_pret (
+    id_echeance INT PRIMARY KEY AUTO_INCREMENT,
+    id_pret INT NOT NULL,
+    mois_numero INT NOT NULL,                     
+    date_echeance DATE NOT NULL,                  
+    montant_annuite DECIMAL(12,2) NOT NULL,       
+    part_interet DECIMAL(12,2) NOT NULL,          
+    part_capital DECIMAL(12,2) NOT NULL,          
+    reste_a_payer DECIMAL(12,2) NOT NULL,         
+    est_paye BOOLEAN DEFAULT FALSE,               
+    FOREIGN KEY (id_pret) REFERENCES ef_pret(id_pret)
+);
+
+
+CREATE TABLE remboursement (
+    id_remboursement INT PRIMARY KEY AUTO_INCREMENT,
+    id_pret INT NOT NULL,                  
+    id_echeance INT,        
+    montant DECIMAL(12,2) NOT NULL,
+    date_remboursement DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_pret) REFERENCES ef_pret(id_pret),
+    FOREIGN KEY (id_echeance) REFERENCES ef_echeance_pret(id_echeance)
+);
+
 -- 6.7 Historique des fonds
 
 CREATE TABLE ef_historique_transaction(
