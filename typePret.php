@@ -131,7 +131,9 @@ if (!isset($_SESSION['user'])) {
             }
           });
         }
-        window.onload = chargerTypesPret;
+        window.onload = function() {
+          chargerTypesPret();
+        };
     </script>
 
 </body>

@@ -5,8 +5,39 @@
       Gestion <b class="font-black">Banquaire</b>
     </div>
   </div>
-  <div class="menu is-menu-main" style="display:flex;flex-direction:column;height:100vh;min-height:100vh;">
-    <div style="flex:1 1 auto;overflow:auto;">
+  <div class="menu is-menu-main">
+    <ul class="menu-list">
+      <li class="active">
+        <a href="dashboard.php">
+          <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
+          <span class="menu-item-label">Dashboard</span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu-list">
+      <li>
+        <a href="AjouteFond.php">
+          <span class="icon"><i class="mdi mdi-bank"></i></span>
+          <span class="menu-item-label">Ajoute Fond</span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu-list">
+      <li>
+        <a href="remboursement.php">
+          <span class="icon"><i class="mdi mdi-bank"></i></span>
+          <span class="menu-item-label">rembource Prêts</span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu-list">
+      <li>
+        <a href="typePret.php">
+          <span class="icon"><i class="mdi mdi-bank"></i></span>
+          <span class="menu-item-label">Types de Prêt</span>
+        </a>
+      </li>
+    </ul>
       <ul class="menu-list">
         <li class="active">
           <a href="dashboard.php">

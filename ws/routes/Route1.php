@@ -5,3 +5,4 @@ Flight::route('POST /addFond', ['Controlleur1', 'create']);
 Flight::route('POST /updateFond/@id', ['Controlleur1', 'update']);
 Flight::route('POST /addHistorique', ['Controlleur1', 'createH']);
 
+Flight::route('GET /clients', ['Controlleur1', 'getClients']);

@@ -34,4 +34,9 @@ class Controlleur1
         $id = Model1::createH($data);
         Flight::json(['message' => 'Fond cret']);
     }
+    public static function getClients()
+    {
+        $model = Model1::getAllClient();
+        Flight::json($model);
+    }
 }
