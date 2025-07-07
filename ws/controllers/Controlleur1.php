@@ -87,9 +87,16 @@ class Controlleur1
                 throw new Exception("Paramètres invalides.");
             }
 
+            // Récupérer l'établissement de l'utilisateur
+            $etabRow = Model1::getById($idClient);
+            if (!$etabRow || !isset($etabRow['id_etablissement'])) {
+                throw new Exception("Établissement non trouvé pour l'utilisateur.");
+            }
+            $idEtablissement = $etabRow['id_etablissement'];
+
             $db->beginTransaction();
 
-            // Génération des échéances si elles n'existent pas encore
+            // Vérifie si les échéances existent déjà
             $stmt = $db->prepare("SELECT COUNT(*) FROM ef_echeance_pret WHERE id_pret = ?");
             $stmt->execute([$idPret]);
             $nbEcheances = (int) $stmt->fetchColumn();
@@ -137,7 +144,7 @@ class Controlleur1
                 }
             }
 
-            // On rembourse les échéances tant que le montantRecu le permet
+            // Remboursement des échéances tant que possible
             $stmt = $db->prepare("SELECT * FROM ef_echeance_pret WHERE id_pret = ? AND est_paye = FALSE ORDER BY mois_numero ASC");
             $stmt->execute([$idPret]);
             $echeances = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -147,9 +154,11 @@ class Controlleur1
             }
 
             $echeancesPayees = 0;
+            $montantInitial = $montantRecu;
 
             foreach ($echeances as $echeance) {
                 $montantEcheance = floatval($echeance['montant_annuite']);
+
                 if ($montantRecu >= $montantEcheance) {
                     // Marquer comme payée
                     $update = $db->prepare("
@@ -169,13 +178,17 @@ class Controlleur1
                     $montantRecu -= $montantEcheance;
                     $echeancesPayees++;
                 } else {
-                    break; // on arrête dès que le montant restant est insuffisant
+                    break; // Montant insuffisant pour une autre échéance
                 }
             }
 
             if ($echeancesPayees === 0) {
                 throw new Exception("Montant insuffisant pour rembourser une échéance.");
             }
+
+            // Mise à jour du solde dans ef_etablissement_financier
+            $montantTotalRembourse = $montantInitial - $montantRecu;
+            Model1::update($idEtablissement, (object)["solde" => $montantTotalRembourse]);
 
             $db->commit();
 
@@ -186,15 +199,11 @@ class Controlleur1
             ]);
         } catch (Exception $e) {
             $db->rollBack();
-
             Flight::json([
                 "success" => false,
                 "error" => $e->getMessage()
             ], 500);
         }
     }
-
-    
-
 
 }
