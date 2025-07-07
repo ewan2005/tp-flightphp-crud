@@ -9,9 +9,19 @@ class ClientController {
         Flight::json($clients);
     }
 
+    // public static function getById($id) {
+    //     $client = Client::getById($id);
+    //     Flight::json($client);
+    // }
+
     public static function getById($id) {
+        require_once __DIR__ . '/../models/Client.php';
         $client = Client::getById($id);
-        Flight::json($client);
+        if ($client) {
+            Flight::json(['success' => true, 'data' => $client]);
+        } else {
+            Flight::json(['success' => false, 'message' => 'Client introuvable']);
+        }
     }
 
     public static function create() {
