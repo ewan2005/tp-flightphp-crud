@@ -2,22 +2,23 @@
 -- SCRIPT DE BASE DE DONNEES POUR GESTION DE PRET BANCAIRE MULTI-ETABLISSEMENT
 -- Réorganisé le 2025-07-07
 -- =========================================
-
+CREATE DATABASE etablissement;
+use etablissement;
 -- 1. TABLE ETABLISSEMENT FINANCIER
-CREATE TABLE etablissement_financier (
+CREATE TABLE ef_etablissement_financier (
     id_etablissement INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     solde DECIMAL(15,2) DEFAULT 0.0
 );
 
 -- 2. TABLE STATUT (aucune dépendance)
-CREATE TABLE statut (
+CREATE TABLE ef_statut (
     id_statut INT AUTO_INCREMENT PRIMARY KEY,
     libelle VARCHAR(50) NOT NULL
 );
 
 -- 3. TABLE UTILISATEUR (admin & agent)
-CREATE TABLE utilisateur (
+CREATE TABLE ef_utilisateur (
     id_utilisateur INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -28,7 +29,7 @@ CREATE TABLE utilisateur (
 );
 
 -- 4. TABLE CLIENT (aucune dépendance)
-CREATE TABLE client (
+CREATE TABLE ef_client (
     id_client INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     email VARCHAR(100) UNIQUE,
@@ -36,7 +37,7 @@ CREATE TABLE client (
 );
 
 -- 5. TABLE TYPE DE PRET
-CREATE TABLE type_pret (
+CREATE TABLE ef_type_pret (
     id_type_pret INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL UNIQUE,
     taux_annuel DECIMAL(5,2) NOT NULL,
@@ -48,7 +49,7 @@ CREATE TABLE type_pret (
 );
 
 -- 6. TABLE PRET
-CREATE TABLE pret (
+CREATE TABLE ef_pret (
     id_pret INT AUTO_INCREMENT PRIMARY KEY,
     id_client INT NOT NULL,
     id_type_pret INT NOT NULL,
@@ -64,7 +65,7 @@ CREATE TABLE pret (
 );
 
 -- 7. TABLE VALIDATION DE PRET
-CREATE TABLE validation_pret (
+CREATE TABLE ef_validation_pret (
     id_validation INT AUTO_INCREMENT PRIMARY KEY,
     id_pret INT NOT NULL,
     id_agent INT NOT NULL,
@@ -75,7 +76,7 @@ CREATE TABLE validation_pret (
 );
 
 -- 8. TABLE AJOUT FONDS
-CREATE TABLE ajout_fonds (
+CREATE TABLE ef_ajout_fonds (
     id_ajout INT AUTO_INCREMENT PRIMARY KEY,
     id_etablissement INT NOT NULL,
     montant DECIMAL(15,2) NOT NULL,
@@ -86,22 +87,22 @@ CREATE TABLE ajout_fonds (
 );
 
 -- 9. INSERTION DE STATUTS PAR DÉFAUT
-INSERT INTO statut (libelle) VALUES
+INSERT INTO ef_statut (libelle) VALUES
 ('En attente'),
 ('Validé'),
 ('Rejeté');
 
 -- 1. Établissement Financier
-INSERT INTO etablissement_financier (nom, solde)
+INSERT INTO ef_etablissement_financier (nom, solde)
 VALUES ('EFI Bank', 10000000.00);
 
 -- Supposons que l’ID généré est 1
 -- 2. Administrateur
-INSERT INTO utilisateur (nom, email, mot_de_passe, role, id_etablissement)
+INSERT INTO ef_utilisateur (nom, email, mot_de_passe, role, id_etablissement)
 VALUES ('Admin Principal', 'admin@efibank.com', 'admin123', 'admin', 1);
 
 -- 3. Agents
-INSERT INTO utilisateur (nom, email, mot_de_passe, role, id_etablissement)
+INSERT INTO ef_utilisateur (nom, email, mot_de_passe, role, id_etablissement)
 VALUES 
 ('Agent One', 'agent1@efibank.com', 'agent123', 'agent', 1),
 ('Agent Two', 'agent2@efibank.com', 'agent456', 'agent', 1);
