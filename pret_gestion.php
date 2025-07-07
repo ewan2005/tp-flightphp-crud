@@ -25,8 +25,11 @@ $user = $_SESSION['user'];
         <input type="hidden" id="id_pret">
         <label>Client :</label>
         <input type="number" id="id_client" required><br>
-        <label>Type de prêt :</label>
-        <input type="number" id="id_type_pret" required><br>
+        <label for="type_pret">Type de prêt</label>
+        <select id="type_pret" name="type_pret" required>
+          <option value="">Sélectionner un type de prêt</option>
+        </select>
+
         <label>Montant :</label>
         <input type="number" id="montant" step="0.01" min="0" required><br>
         <label>Durée (mois) :</label>
@@ -49,7 +52,7 @@ $user = $_SESSION['user'];
         <tbody></tbody>
     </table>
     <script>
-const apiBase = "http://localhost:8888/tp-flightphp-crud/ws";
+const apiBase = "http://localhost/tp-flightphp-crud/ws";
 
 function ajax(method, url, data, callback) {
   const xhr = new XMLHttpRequest();
@@ -62,6 +65,22 @@ function ajax(method, url, data, callback) {
   };
   xhr.send(data);
 }
+
+function chargerTypesPretSelect() {
+  ajax("GET", "/typePret", null, (data) => {
+    const select = document.getElementById("type_pret");
+    select.innerHTML = '<option value="">Sélectionner un type de prêt</option>';
+    data.forEach(t => {
+      const option = document.createElement("option");
+      option.value = t.id_type_pret;
+      option.textContent = t.nom;
+      select.appendChild(option);
+    });
+  });
+}
+
+// Appelle cette fonction au chargement de la page :
+window.onload = chargerTypesPretSelect;
 
 function chargerPrets() {
   ajax("GET", "/prets", null, (data) => {

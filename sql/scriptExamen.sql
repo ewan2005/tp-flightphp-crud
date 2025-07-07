@@ -33,6 +33,8 @@ CREATE TABLE ef_client (
     telephone VARCHAR(20)
 );
 
+
+
 -- 5. TABLE TYPE DE PRET
 CREATE TABLE ef_type_pret (
     id_type_pret INT AUTO_INCREMENT PRIMARY KEY,
