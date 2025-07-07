@@ -12,17 +12,6 @@ class PretController {
 
     public static function getById($id) {
         $pret = Pret::getById($id);
-        // Ajout de l'échéancier calculé si prêt trouvé
-        if ($pret) {
-            $typePret = TypePret::getById($pret['id_type_pret']);
-            $echeancier = Echeancier::generer(
-                $pret['montant'],
-                $typePret['taux_annuel'],
-                $pret['duree'],
-                $pret['date_demande']
-            );
-            $pret['echeancier'] = $echeancier;
-        }
         Flight::json($pret);
     }
 
@@ -53,9 +42,9 @@ class PretController {
         $id = Pret::create($data);
         // 5. Débiter l'établissement
         Etablissement::debiter($typePret['id_etablissement'], $data->montant);
-        // 6. Générer l'échéancier (juste pour retour, pas d'insertion)
-        $echeancier = Echeancier::generer($data->montant, $typePret['taux_annuel'], $data->duree, $data->date_demande);
-        Flight::json(['success'=>true, 'message' => 'Demande de prêt enregistrée', 'id' => $id, 'echeancier' => $echeancier]);
+        // 6. Générer l'échéancier
+        Echeancier::generer($id, $data->montant, $typePret['taux_annuel'], $data->duree, $data->date_demande);
+        Flight::json(['success'=>true, 'message' => 'Demande de prêt enregistrée', 'id' => $id]);
     }
 
     public static function update($id) {
