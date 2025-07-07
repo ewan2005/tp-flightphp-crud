@@ -14,7 +14,6 @@
 </head>
 <body>
   <div class="main-section" style="max-width:500px;width:95vw;min-height:50vh;">
-    <?php include('sidebar.php'); ?>
     <div class="login-box">
       <h2>Connexion</h2>
       <div id="message"></div>

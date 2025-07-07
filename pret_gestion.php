@@ -47,10 +47,10 @@ $user = $_SESSION['user'];
             <label>Date de début :</label>
             <input type="date" id="date_demande" required style="width:100%;">
           </div>
-          <div>
+          <!-- <div>
             <label>Agent :</label>
             <input type="text" id="agent" style="width:100%;">
-          </div>
+          </div> -->
           <div style="display:flex;align-items:end;height:100%;grid-column:span 3;">
             <button type="submit" style="width:100%;">Ajouter/Modifier</button>
           </div>
@@ -100,17 +100,32 @@ function chargerTypesPretSelect() {
 }
 
 function chargerClientsSelect() {
+  const params = new URLSearchParams(window.location.search);
+  const idClientURL = params.get("id_client");
+  const select = document.getElementById("id_client");
   ajax("GET", "/clients", null, (data) => {
-    const select = document.getElementById("id_client");
     select.innerHTML = '<option value="">Sélectionner un client</option>';
     data.forEach(e => {
       const option = document.createElement("option");
       option.value = e.id_client;
       option.textContent = e.nom + (e.prenom ? (' ' + e.prenom) : '');
+      if (idClientURL && e.id_client == idClientURL) {
+        option.selected = true;
+      }
       select.appendChild(option);
     });
+    // Si id_client dans l'URL, désactive le select et ajoute un champ caché pour l'envoi
+    if (idClientURL) {
+      select.disabled = true;
+      let hidden = document.createElement("input");
+      hidden.type = "hidden";
+      hidden.name = "id_client";
+      hidden.value = idClientURL;
+      select.parentNode.appendChild(hidden);
+    }
   });
 }
+
 
 function chargerAgentField() {
   const user = <?php echo json_encode($user); ?>;
@@ -154,6 +169,8 @@ function chargerPrets() {
   });
 }
 
+const user = <?php echo json_encode($user); ?>;
+
 function ajouterOuModifierPret() {
   const id = document.getElementById("id_pret").value;
   const id_client = document.getElementById("id_client").value;
@@ -161,7 +178,7 @@ function ajouterOuModifierPret() {
   const montant = document.getElementById("montant").value;
   const duree = document.getElementById("duree").value;
   const date_demande = document.getElementById("date_demande").value;
-  const id_agent = document.getElementById("id_agent").value;
+  const id_agent = user.id_utilisateur;
   const resultDiv = document.getElementById("result");
   const echeancierDiv = document.getElementById("echeancier");
 
@@ -213,8 +230,8 @@ function remplirFormPret(p) {
   document.getElementById("montant").value = p.montant;
   document.getElementById("duree").value = p.duree;
   document.getElementById("date_demande").value = p.date_demande;
-  if (document.getElementById("id_agent"))
-    document.getElementById("id_agent").value = p.id_agent;
+  // if (document.getElementById("id_agent"))
+  //   document.getElementById("id_agent").value = p.id_agent;
 }
 
 function supprimerPret(id) {
@@ -232,15 +249,15 @@ function resetFormPret() {
   document.getElementById("montant").value = "";
   document.getElementById("duree").value = "";
   document.getElementById("date_demande").value = "";
-  if (document.getElementById("id_agent"))
-    document.getElementById("id_agent").value = "";
+  // if (document.getElementById("id_agent"))
+  //   document.getElementById("id_agent").value = "";
 }
 
 // Charger tous les éléments nécessaires au chargement de la page
 window.onload = function() {
   chargerTypesPretSelect();
   chargerClientsSelect();
-  chargerAgentField();
+  // chargerAgentField();
   chargerPrets();
 };
 </script>
