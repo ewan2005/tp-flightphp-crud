@@ -116,11 +116,11 @@ VALUES ('EFI Bank', 10000000.00);
 -- Supposons que l’ID généré est 1
 -- 2. Administrateur
 INSERT INTO ef_utilisateur (nom, email, mot_de_passe, role, id_etablissement)
-VALUES ('Admin Principal', 'admin@efibank.com', 'admin123', 'admin', 1);
+VALUES ('Admin Principal', 'admin@gmail.com', 'admin123', 'admin', 1);
 
 -- 3. Agents
 INSERT INTO ef_utilisateur (nom, email, mot_de_passe, role, id_etablissement)
 VALUES 
-('Agent One', 'agent1@efibank.com', 'agent123', 'agent', 1),
-('Agent Two', 'agent2@efibank.com', 'agent456', 'agent', 1);
+('Agent One', 'agent1@gmail.com', 'agent123', 'agent', 1),
+('Agent Two', 'agent2@gmail.com', 'agent456', 'agent', 1);
 

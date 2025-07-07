@@ -28,6 +28,20 @@
 
         <button type="submit">Ajouter</button>
     </form>
+      <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Email</th>
+        <th>Profil</th>
+      </tr>
+    </thead>
+    <tbody id="clients-tbody">
+      <!-- Les clients seront insérés ici -->
+    </tbody>
+  </table>
 </body>
 </html>
 <script>
@@ -65,4 +79,23 @@
             }
         });
     }
+
+    function chargerClients() {
+        ajax("GET", "/clients", null, (data) => {
+            const tbody = document.getElementById("clients-tbody");
+            tbody.innerHTML = "";
+            data.forEach(client => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${client.id_client}</td>
+                    <td>${client.nom}</td>
+                    <td>${client.prenom}</td>
+                    <td>${client.email}</td>
+                    <td><a href="profil_client.php?id=${client.id_client}">Voir Profil</a></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        });
+    }
+    window.onload = chargerClients;
 </script>
