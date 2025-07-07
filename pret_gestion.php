@@ -80,7 +80,6 @@ function chargerTypesPretSelect() {
     });
   });
 }
-window.onload = chargerTypesPretSelect
 
 function chargerClientsSelect() {
   ajax("GET", "/clients", null, (data) => {
