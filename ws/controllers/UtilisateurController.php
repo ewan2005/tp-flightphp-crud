@@ -16,4 +16,9 @@ class UtilisateurController {
         }
         return ['success' => false, 'message' => 'Identifiants invalides'];
     }
+
+    public static function getAllAgents() {
+        $agents = Utilisateur::getAllAgents();
+        Flight::json($agents);
+    }
 }
