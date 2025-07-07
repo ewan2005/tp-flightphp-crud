@@ -7,41 +7,49 @@
     <title>Ajouter un client</title>
 </head>
 <body>
-    <h2>Ajouter un client</h2>
-        <?php include('sidebar.php'); ?>
-
-    <form onsubmit="ajouterClient(event)">
-        <label>Nom:</label><br>
-        <input type="text" id="nom" name="nom" required><br><br>
-
-        <label>Prénom:</label><br>
-        <input type="text" id="prenom" name="prenom" required><br><br>
-
-        <label>Date de naissance:</label><br>
-        <input type="date" id="date_naissance" name="date_naissance" required><br><br>
-
-        <label>Email:</label><br>
-        <input type="email" id="email" name="email"><br><br>
-
-        <label>Téléphone:</label><br>
-        <input type="text" id="telephone" name="telephone"><br><br>
-
-        <button type="submit">Ajouter</button>
-    </form>
-      <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nom</th>
-        <th>Prénom</th>
-        <th>Email</th>
-        <th>Profil</th>
-      </tr>
-    </thead>
-    <tbody id="clients-tbody">
-      <!-- Les clients seront insérés ici -->
-    </tbody>
-  </table>
+    <?php include('sidebar.php'); ?>
+    <div class="main-section" style="max-width:1100px;width:95vw;min-height:70vh;">
+      <h2>Ajouter un client</h2>
+      <form onsubmit="ajouterClient(event)" style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:end;max-width:900px;margin:0 auto 2rem auto;">
+        <div>
+          <label>Nom:</label><br>
+          <input type="text" id="nom" name="nom" required style="width:100%;">
+        </div>
+        <div>
+          <label>Prénom:</label><br>
+          <input type="text" id="prenom" name="prenom" required style="width:100%;">
+        </div>
+        <div>
+          <label>Date de naissance:</label><br>
+          <input type="date" id="date_naissance" name="date_naissance" required style="width:100%;">
+        </div>
+        <div>
+          <label>Email:</label><br>
+          <input type="email" id="email" name="email" style="width:100%;">
+        </div>
+        <div>
+          <label>Téléphone:</label><br>
+          <input type="text" id="telephone" name="telephone" style="width:100%;">
+        </div>
+        <div style="display:flex;align-items:end;height:100%;">
+          <button type="submit" style="width:100%;">Ajouter</button>
+        </div>
+      </form>
+      <table class="table-centered" style="margin-top:2rem;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Profil</th>
+          </tr>
+        </thead>
+        <tbody id="clients-tbody">
+          <!-- Les clients seront insérés ici -->
+        </tbody>
+      </table>
+    </div>
 </body>
 </html>
 <script>

@@ -27,105 +27,112 @@ if (!isset($_SESSION['user'])) {
 <body>
 
     <?php include('sidebar.php'); ?>
+    <div class="main-section" style="max-width:900px;width:95vw;min-height:60vh;">
+      <h2>Créer un Type de Prêt</h2>
+      <div id="message"></div>
+      <form id="typePretForm" onsubmit="ajouterTypePret(event)" style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:end;max-width:700px;margin:0 auto 2rem auto;">
+        <div>
+          <label for="nom">Nom du type de prêt</label>
+          <input type="text" id="nom" name="nom" required style="width:100%;">
+        </div>
+        <div>
+          <label for="taux">Taux d’intérêt annuel (%)</label>
+          <input type="number" id="taux" name="taux" step="0.01" min="0.01" max="100" required style="width:100%;">
+        </div>
 
-<div class="form-container">
-    <h2>Créer un Type de Prêt</h2>
-    <div id="message"></div>
-    <form id="typePretForm" onsubmit="ajouterTypePret(event)">
-        <label for="nom">Nom du type de prêt</label>
-        <input type="text" id="nom" name="nom" required>
+        <div>
+          <label for="duree">Durée maximale (en mois)</label>
+          <input type="number" id="duree" name="duree" min="1" required style="width:100%;">
+        </div>
+        <div>
+          <label for="montant_min">Montant minimum (Ar)</label>
+          <input type="number" id="montant_min" name="montant_min" min="1000" required style="width:100%;">
+        </div>
+        <div>
+          <label for="montant_max">Montant maximum (Ar)</label>
+          <input type="number" id="montant_max" name="montant_max" min="1000" required style="width:100%;">
+        </div>
+        <div style="display:flex;align-items:end;height:100%;grid-column:span 2;">
+          <button type="submit" style="width:100%;">Créer</button>
+        </div>
+      </form>
+      <div>
+      <h1>Liste des types pret</h1>
 
-        <label for="taux">Taux d’intérêt annuel (%)</label>
-        <input type="number" id="taux" name="taux" step="0.01" min="0.01" max="100" required>
+      <table id="type-pret">
+            <thead>
+            <tr>
+              <th>ID</th><th>ID Etablissement</th><th>Nom</th><th>Taux d’intérêt annuel</th><th>Durée maximale (en mois)</th><th>Montant minimum (Ar)</th><th>Montant maximum (Ar)</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+      </table>
 
-        <label for="duree">Durée maximale (en mois)</label>
-        <input type="number" id="duree" name="duree" min="1" required>
+      </div>
+    </div>
+    <script>
+        const apiBase = "http://localhost/tp-flightphp-crud/ws";
 
-        <label for="montant_min">Montant minimum (Ar)</label>
-        <input type="number" id="montant_min" name="montant_min" min="1000" required>
-
-        <label for="montant_max">Montant maximum (Ar)</label>
-        <input type="number" id="montant_max" name="montant_max" min="1000" required>
-
-        <button type="submit">Créer le type de prêt</button>
-    </form>
-</div>
-<div>
-<h1>Liste des types pret</h1>
-
-<table id="type-pret">
-      <thead>
-      <tr>
-        <th>ID</th><th>ID Etablissement</th><th>Nom</th><th>Taux d’intérêt annuel</th><th>Durée maximale (en mois)</th><th>Montant minimum (Ar)</th><th>Montant maximum (Ar)</th><th>Actions</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-</table>
-
-</div>
-<script>
-    const apiBase = "http://localhost/tp-flightphp-crud/ws";
-
-    function ajax(method, url, data, callback) {
-      const xhr = new XMLHttpRequest();
-      xhr.open(method, apiBase + url, true);
-      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          let res = {};
-          try { res = JSON.parse(xhr.responseText); } catch {}
-          callback(res, xhr.status);
+        function ajax(method, url, data, callback) {
+          const xhr = new XMLHttpRequest();
+          xhr.open(method, apiBase + url, true);
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+              let res = {};
+              try { res = JSON.parse(xhr.responseText); } catch {}
+              callback(res, xhr.status);
+            }
+          };
+          xhr.send(data);
         }
-      };
-      xhr.send(data);
-    }
 
-    function ajouterTypePret(event) {
-      event.preventDefault();
-      const nom = document.getElementById("nom").value;
-      const taux = document.getElementById("taux").value;
-      const duree = document.getElementById("duree").value;
-      const montant_min = document.getElementById("montant_min").value;
-      const montant_max = document.getElementById("montant_max").value;
-      const messageDiv = document.getElementById("message");
+        function ajouterTypePret(event) {
+          event.preventDefault();
+          const nom = document.getElementById("nom").value;
+          const taux = document.getElementById("taux").value;
+          const duree = document.getElementById("duree").value;
+          const montant_min = document.getElementById("montant_min").value;
+          const montant_max = document.getElementById("montant_max").value;
+          const messageDiv = document.getElementById("message");
 
-        const data = `nom=${encodeURIComponent(nom)}&taux_annuel=${encodeURIComponent(taux)}&duree_max=${encodeURIComponent(duree)}&montant_min=${encodeURIComponent(montant_min)}&montant_max=${encodeURIComponent(montant_max)}`;
-      ajax("POST", "/typePret", data, (res, status) => {
-        if (status === 200 && res.success) {
-          messageDiv.innerHTML = "<span class='success'>Type de prêt créé avec succès !</span>";
-          document.getElementById("typePretForm").reset();
-        } else {
-          messageDiv.innerHTML = "<span class='error'>" + (res.message || "Erreur lors de la création") + "</span>";
-        }
-      });
-    }
-
-    function chargerTypesPret() {
-      ajax("GET", "/typePret", null, (res) => {
-        const tbody = document.querySelector("#type-pret tbody");
-        tbody.innerHTML = ""; // Vider le tableau avant de le remplir
-        if (res && res.length > 0) {
-          res.forEach(type => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-              <td>${type.id_type_pret}</td>
-              <td>${type.id_etablissement}</td>
-              <td>${type.nom}</td>
-              <td>${type.taux_annuel}</td>
-              <td>${type.duree_max}</td>
-              <td>${type.montant_min}</td>
-              <td>${type.montant_max}</td>
-              <td><button onclick="supprimerTypePret(${type.id_type_pret})">Supprimer</button></td>
-            `;
-            tbody.appendChild(row);
+            const data = `nom=${encodeURIComponent(nom)}&taux_annuel=${encodeURIComponent(taux)}&duree_max=${encodeURIComponent(duree)}&montant_min=${encodeURIComponent(montant_min)}&montant_max=${encodeURIComponent(montant_max)}`;
+          ajax("POST", "/typePret", data, (res, status) => {
+            if (status === 200 && res.success) {
+              messageDiv.innerHTML = "<span class='success'>Type de prêt créé avec succès !</span>";
+              document.getElementById("typePretForm").reset();
+            } else {
+              messageDiv.innerHTML = "<span class='error'>" + (res.message || "Erreur lors de la création") + "</span>";
+            }
           });
-        } else {
-          tbody.innerHTML = "<tr><td colspan='8'>Aucun type de prêt trouvé</td></tr>";
         }
-      });
-    }
-    window.onload = chargerTypesPret;
-</script>
+
+        function chargerTypesPret() {
+          ajax("GET", "/typePret", null, (res) => {
+            const tbody = document.querySelector("#type-pret tbody");
+            tbody.innerHTML = ""; // Vider le tableau avant de le remplir
+            if (res && res.length > 0) {
+              res.forEach(type => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                  <td>${type.id_type_pret}</td>
+                  <td>${type.id_etablissement}</td>
+                  <td>${type.nom}</td>
+                  <td>${type.taux_annuel}</td>
+                  <td>${type.duree_max}</td>
+                  <td>${type.montant_min}</td>
+                  <td>${type.montant_max}</td>
+                  <td><button onclick="supprimerTypePret(${type.id_type_pret})">Supprimer</button></td>
+                `;
+                tbody.appendChild(row);
+              });
+            } else {
+              tbody.innerHTML = "<tr><td colspan='8'>Aucun type de prêt trouvé</td></tr>";
+            }
+          });
+        }
+        window.onload = chargerTypesPret;
+    </script>
 
 </body>
 </html>

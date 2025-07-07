@@ -55,7 +55,12 @@
       </li>
     </ul>
     <ul class="menu-list">
-      <!-- autres éléments du menu -->
+      <li>
+        <a href="interets.php">
+          <span class="icon"><i class="mdi mdi-percent"></i></span>
+          <span class="menu-item-label">Gestion des Intérêts</span>
+        </a>
+      </li>
     </ul>
   </div>
   <?php

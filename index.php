@@ -9,18 +9,21 @@
     .login-box { max-width: 350px; margin: 60px auto; border: 1px solid #ccc; padding: 30px; border-radius: 8px; }
     .error { color: red; }
     .success { color: green; }
+    .main-section { display: flex; justify-content: center; align-items: center; height: 100vh; }
   </style>
 </head>
 <body>
-
-  <div class="login-box">
-    <h2>Connexion</h2>
-    <div id="message"></div>
-    <form id="loginForm" onsubmit="login(event)">
-      <input type="email" id="email" placeholder="Email" required><br>
-      <input type="password" id="mot_de_passe" placeholder="Mot de passe" required><br>
-      <button type="submit">Se connecter</button>
-    </form>
+  <div class="main-section" style="max-width:500px;width:95vw;min-height:50vh;">
+    <?php include('sidebar.php'); ?>
+    <div class="login-box">
+      <h2>Connexion</h2>
+      <div id="message"></div>
+      <form id="loginForm" onsubmit="login(event)">
+        <input type="email" id="email" placeholder="Email" required><br>
+        <input type="password" id="mot_de_passe" placeholder="Mot de passe" required><br>
+        <button type="submit">Se connecter</button>
+      </form>
+    </div>
   </div>
 
   <script>
@@ -56,3 +59,5 @@
     });
   }
   </script>
+</body>
+</html>

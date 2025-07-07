@@ -7,7 +7,7 @@
 </head>
 <body>
   <?php include('sidebar.php'); ?>
-  <div style="max-width:500px;margin:40px auto;">
+  <div class="main-section" style="max-width:900px;width:95vw;min-height:60vh;">
     <h2>Profil du client</h2>
 
       <ul>

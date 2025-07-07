@@ -27,8 +27,6 @@ class PretController {
             Flight::json(['success'=>false, 'message'=>'Le montant demandé n\'est pas autorisé pour ce type de prêt'], 400);
             return;
         }
-        // 2. Vérifier qu'il n'y a pas déjà un prêt actif pour ce client
-        // (Suppression de la restriction : un client peut avoir plusieurs prêts actifs)
         // 3. Vérifier les fonds de l'établissement
         $solde = Etablissement::getSolde($typePret['id_etablissement']);
         if ($solde < $data->montant) {
