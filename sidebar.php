@@ -26,4 +26,14 @@
       <!-- autres éléments du menu -->
     </ul>
   </div>
+  <?php
+  session_start();
+  if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'];
+    echo '<div style="background:#f2f2f2;padding:10px 12px 10px 12px;margin-bottom:8px;border-radius:6px;display:flex;flex-direction:column;align-items:flex-start;">';
+    echo 'Connecté : <b>' . htmlspecialchars($user['nom']) . '</b> (' . htmlspecialchars($user['role']) . ')<br>';
+    echo '<a href="logout.php" style="color:#fff;background:#d9534f;padding:4px 10px;border-radius:4px;text-decoration:none;margin-top:6px;">Déconnexion</a>';
+    echo '</div>';
+  }
+  ?>
 </aside>
