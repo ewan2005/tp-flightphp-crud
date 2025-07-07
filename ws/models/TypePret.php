@@ -32,6 +32,13 @@ class TypePret {
         return $db->lastInsertId();
     }
 
+    public static function getTauxTypePret($id){
+        $db = getDB();
+        $stmt = $db->prepare("SELECT taux_annuel FROM ef_type_pret WHERE id_type_pret = ?");
+        $stmt->execute([$id]);
+        return $stmt->fetchColumn();
+    }
+
     public static function update($id, $data) {
         $db = getDB();
         $stmt = $db->prepare("

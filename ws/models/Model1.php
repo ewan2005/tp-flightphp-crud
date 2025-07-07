@@ -10,6 +10,18 @@ class Model1 {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public static function getAll() {
+        $db = getDB();
+        $stmt = $db->query("SELECT * FROM ef_etablissement_financier");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getHistorique() {
+        $db = getDB();
+        $stmt = $db->query("SELECT * FROM ef_historique_transaction");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function create($data) {
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO ef_ajout_fonds (id_utilisateur, montant, date_ajout) VALUES (?, ?, ?)");

@@ -119,7 +119,17 @@ $id = $_SESSION['user']['id_utilisateur'];
         <div id="erreur" class="alert alert-error" style="display: none;"></div>
         <div id="message" class="alert alert-success" style="display: none;"></div>
     </div>
-
+      <table class="table-centered" style="margin-top:2rem;">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>montant</th>
+          </tr>
+        </thead>
+        <tbody id="fond-tbody">
+          <!-- Les clients seront insérés ici -->
+        </tbody>
+      </table>
     <script>
         const apiBase = "http://localhost/tp-flightphp-crud/ws";
 
@@ -133,6 +143,21 @@ $id = $_SESSION['user']['id_utilisateur'];
                 }
             };
             xhr.send(data);
+        }
+
+        function chargerFond(){
+            ajax("GET","/fond",null, (data)=> {
+                const tbody = document.getElementById("fond-tbody");
+                tbody.innerHTML = "";
+                data.forEach(fond => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `
+                        <td>${fond.id_etablissement}</td>
+                        <td>${fond.solde}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
         }
 
         function verification() {
@@ -170,6 +195,10 @@ $id = $_SESSION['user']['id_utilisateur'];
                 });
             }
         }
+
+        window.onload = function() {
+            chargerFond();
+        };
 
         function succes() {
             const successDiv = document.getElementById("message");

@@ -32,14 +32,13 @@ class Pret {
 
     public static function update($id, $data) {
         $db = getDB();
-        $stmt = $db->prepare("UPDATE ef_pret SET id_client=?, id_type_pret=?, montant=?, duree=?, date_demande=?, id_statut=?, id_agent=? WHERE id_pret=?");
+        $stmt = $db->prepare("UPDATE ef_pret SET id_client=?, id_type_pret=?, montant=?, duree=?, date_demande=?, id_agent=? WHERE id_pret=?");
         $stmt->execute([
             $data->id_client,
             $data->id_type_pret,
             $data->montant,
             $data->duree,
             $data->date_demande,
-            $data->id_statut,
             $data->id_agent,
             $id
         ]);
