@@ -9,6 +9,19 @@ class Model1 {
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+    
+    // public static function getAssuranceById($id) {
+    //     $db = getDB();
+    //     $stmt = $db->prepare("SELECT assurance FROM ef_pret WHERE id_pret = ?");
+    //     $stmt->execute([$id]);
+    //     return $stmt->fetch(PDO::FETCH_ASSOC);
+    // }
+
+    public static function getAll() {
+        $db = getDB();
+        $stmt = $db->query("SELECT * FROM ef_etablissement_financier");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public static function create($data) {
         $db = getDB();
@@ -81,7 +94,7 @@ class Model1 {
     public static function annuiter($idPret) 
     {
         $db = getDB();
-        $stmt = $db->prepare("SELECT montant, duree FROM ef_pret WHERE id_pret = ?");
+        $stmt = $db->prepare("SELECT montant, duree,assurance FROM ef_pret WHERE id_pret = ?");
         $stmt->execute([$idPret]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }

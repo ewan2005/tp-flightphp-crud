@@ -166,24 +166,18 @@ function getMontantAnnuite(idPret) {
     sectionMontant.innerHTML = "";
 
     ajax("GET", `/Annuite/${idPret}`, null, (data) => {
-        const label = document.createElement("label");
-        label.textContent = "Montant de l'échéance actuelle (annuité constante)";
+        // data doit contenir : montant_annuite, montant_assurance
+        const annuite = data.montant_annuite || 0;
+        const assurance = data.montant_assurance;
+        const total = annuite + assurance;
 
-        const input = document.createElement("input");
-        input.type = "number";
-        input.name = "montant";
-        input.step = "0.01";
-        input.required = true;
-        input.value = data.montant_annuite || 0;
-
-        const hiddenPret = document.createElement("input");
-        hiddenPret.type = "hidden";
-        hiddenPret.name = "idPret";
-        hiddenPret.value = idPret;
-
-        sectionMontant.appendChild(label);
-        sectionMontant.appendChild(input);
-        sectionMontant.appendChild(hiddenPret);
+        let html = `<label>Montant de l'échéance actuelle</label>`;
+        html += `<div><b>Annuité constante :</b> ${annuite.toFixed(2)} Ar</div>`;
+        html += `<div><b>Assurance :</b> ${assurance.toFixed(2)} Ar</div>`;
+        html += `<div><b>Total à payer :</b> ${total.toFixed(2)} Ar</div>`;
+        html += `<input type="number" name="montant" step="0.01" required value="${total.toFixed(2)}">`;
+        html += `<input type="hidden" name="idPret" value="${idPret}">`;
+        sectionMontant.innerHTML = html;
     });
 }
 

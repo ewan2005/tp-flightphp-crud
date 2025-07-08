@@ -83,6 +83,7 @@ $id = $_SESSION['user']['id_utilisateur'];
                 });
             });
         }
+
         function verification() {
             const errorDiv = document.getElementById("erreur");
             const successDiv = document.getElementById("message");
@@ -121,6 +122,7 @@ $id = $_SESSION['user']['id_utilisateur'];
             successDiv.innerHTML = "<i class='fas fa-check-circle mr-1'></i> Fonds enregistrés avec succès !";
             successDiv.style.display = "block";
             document.getElementById("montant").value = "";
+            chargerFond(); // Recharge le tableau immédiatement
             setTimeout(() => {
                 successDiv.style.display = "none";
             }, 5000);

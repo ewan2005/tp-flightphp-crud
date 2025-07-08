@@ -58,6 +58,7 @@ CREATE TABLE ef_pret (
     date_demande DATE NOT NULL,
     id_statut INT NOT NULL,
     id_agent INT NOT NULL,
+    assurance INT NOT NULL DEFAULT 0, -- 0 pour non, 1 pour oui
     FOREIGN KEY (id_client) REFERENCES ef_client(id_client),
     FOREIGN KEY (id_type_pret) REFERENCES ef_type_pret(id_type_pret),
     FOREIGN KEY (id_statut) REFERENCES ef_statut(id_statut),

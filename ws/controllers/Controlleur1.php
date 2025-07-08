@@ -11,6 +11,15 @@ class Controlleur1
         Flight::json($model);
     }
 
+    // public static function getAssuranceById($id) {
+    //     $model = Model1::getAssuranceById($id);
+    //     if ($model) {
+    //         Flight::json(['success' => true, 'data' => $model]);
+    //     } else {
+    //         Flight::json(['success' => false, 'message' => 'Assurance introuvable'], 404);
+    //     }
+    // }
+
     public static function create() 
     {
         $data = Flight::request()->data;
@@ -64,16 +73,24 @@ class Controlleur1
     
         $taux_annuel = 0.12;
         $taux_mensuel = $taux_annuel / 12;
-    
+        $taux_assurance = $model['assurance']; 
         $annuite = $montant * ($taux_mensuel / (1 - pow(1 + $taux_mensuel, -$duree)));
-    
+        $montant_assurance = $montant * ($taux_assurance / 100);
+        
         Flight::json([
             'id_pret' => $idPret,
             'montant_annuite' => round($annuite, 2),
+            'montant_assurance' => round($montant_assurance, 2),
             'taux_mensuel' => $taux_mensuel,
             'duree' => $duree
         ]);
     } 
+
+    public static function getAll()
+    {
+        $model = Model1::getAll();
+        Flight::json($model);
+    }
 
     public static function traitement_annuite()
     {

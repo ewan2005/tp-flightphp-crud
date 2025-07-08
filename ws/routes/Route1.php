@@ -11,4 +11,5 @@ Flight::route('GET /echeance/@id', ['Controlleur1', 'getEcheance']);
 
 Flight::route('GET /Annuite/@idPret',['Controlleur1','annuite']);
 Flight::route('POST /traitement_annuite',['Controlleur1','traitement_annuite']);
-
+Flight::route('GET /fond', ['Controlleur1', 'getAll']);
+// Flight::route('GET /assurance/@id', ['Controlleur1', 'getAssuranceById']);

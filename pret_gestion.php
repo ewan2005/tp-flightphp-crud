@@ -44,6 +44,10 @@ $user = $_SESSION['user'];
             <label>Date de début :</label>
             <input type="date" id="date_demande" required style="width:100%;">
           </div>
+          <div>
+            <label>Assurance :</label>
+            <input type="number" id="assurance" step="0.01" min="0" required style="width:100%;">
+          </div>
           <!-- <div>
             <label>Agent :</label>
             <input type="text" id="agent" style="width:100%;">
@@ -122,22 +126,35 @@ function simulerPret(){ //hijerevena hoe somme que le client doit payer toute la
   const typePretSelect = document.getElementById("type_pret");
   const selectedOption = typePretSelect.options[typePretSelect.selectedIndex];
   const taux = parseFloat(selectedOption.getAttribute("data-taux")) || 0;
+  const assurance = parseFloat(document.getElementById("assurance").value) || 0;
 
   const tauxMensuel = taux / 100 / 12;
   const mensualite = (montant * tauxMensuel) / (1- Math.pow(1+tauxMensuel,-duree));
+  const mensualite_assurance = montant * (assurance / 100);
+  const mensualite_totale = mensualite + mensualite_assurance;
 
+  // Affichage simulation
   const resultDiv = document.getElementById("result");
   resultDiv.innerHTML=`
     <div class="success">
       <b>Simulation :</b><br>
-      Mensualité estimée : ${mensualite.toFixed(2)} Ar<br>
-      Coût total : ${(mensualite * duree).toFixed(2)} Ar<br>
-      Taux annuel : ${taux} %
+      Mensualité estimée (hors assurance) : ${mensualite.toFixed(2)} Ar<br>
+      Mensualité assurance : ${mensualite_assurance.toFixed(2)} Ar<br>
+      <b>Mensualité totale : ${mensualite_totale.toFixed(2)} Ar</b><br>
+      Coût total (avec assurance) : ${(mensualite_totale * duree).toFixed(2)} Ar<br>
+      Taux annuel : ${taux} %<br>
+      Taux assurance : ${assurance} %<br>
       <button onclick='ajouterOuModifierPret()'>Valider le pret</button>
-
     </div>
   `;
 
+  // Affichage échéancier
+  let echeancierHtml = '<h4>Échéancier prévisionnel</h4><table border="1"><tr><th>#</th><th>Mensualité</th><th>Assurance</th><th>Total à payer</th></tr>';
+  for(let i=1; i<=duree; i++){
+    echeancierHtml += `<tr><td>${i}</td><td>${mensualite.toFixed(2)} Ar</td><td>${mensualite_assurance.toFixed(2)} Ar</td><td>${mensualite_totale.toFixed(2)} Ar</td></tr>`;
+  }
+  echeancierHtml += '</table>';
+  document.getElementById("echeancier").innerHTML = echeancierHtml;
 }
 
 function chargerClientsSelect() {
@@ -223,14 +240,15 @@ function ajouterOuModifierPret() {
   const id_agent = user.id_utilisateur;
   const resultDiv = document.getElementById("result");
   const echeancierDiv = document.getElementById("echeancier");
-
+  const assurance = document.getElementById("assurance").value;
   const data = {
     id_client,
     id_type_pret,
     montant,
     duree,
     date_demande,
-    id_agent
+    id_agent,
+    assurance
   };
 
   function afficherEcheancier(echeancier) {
@@ -272,6 +290,7 @@ function remplirFormPret(p) {
   document.getElementById("montant").value = p.montant;
   document.getElementById("duree").value = p.duree;
   document.getElementById("date_demande").value = p.date_demande;
+  document.getElementById("assurance").value = p.assurance || 0; // Assure que l'assurance est définie
   // if (document.getElementById("id_agent"))
   //   document.getElementById("id_agent").value = p.id_agent;
 }
@@ -291,6 +310,7 @@ function resetFormPret() {
   document.getElementById("montant").value = "";
   document.getElementById("duree").value = "";
   document.getElementById("date_demande").value = "";
+  document.getElementById("assurance").value = 0; // Réinitialise l'assurance à 0
   // if (document.getElementById("id_agent"))
   //   document.getElementById("id_agent").value = "";
 }
