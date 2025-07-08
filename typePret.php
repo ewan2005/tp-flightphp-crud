@@ -27,6 +27,7 @@ if (!isset($_SESSION['user'])) {
 <body>
 
     <?php include('sidebar.php'); ?>
+    <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
     <div class="main-section" style="max-width:900px;width:95vw;min-height:60vh;">
       <h2>Créer un Type de Prêt</h2>
       <div id="message"></div>
@@ -70,6 +71,7 @@ if (!isset($_SESSION['user'])) {
 
       </div>
     </div>
+    <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
     <script>
         const apiBase = "http://localhost/tp-flightphp-crud/ws";
 
@@ -104,6 +106,7 @@ if (!isset($_SESSION['user'])) {
             } else {
               messageDiv.innerHTML = "<span class='error'>" + (res.message || "Erreur lors de la création") + "</span>";
             }
+            location.reload();
           });
         }
 

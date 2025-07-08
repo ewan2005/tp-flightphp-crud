@@ -19,6 +19,7 @@ $user = $_SESSION['user'];
 </style>
 <body>
         <?php include('sidebar.php'); ?>
+        <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
         <h2>Gestion des Prêts</h2>
         <form id="pretForm" onsubmit="event.preventDefault(); ajouterOuModifierPret();" style="width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;align-items:end;max-width:900px;margin:0 auto 2rem auto;">
           <input type="hidden" id="id_pret">
@@ -72,6 +73,7 @@ $user = $_SESSION['user'];
             </thead>
             <tbody></tbody>
         </table>
+        <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
         <script>
 const apiBase = "http://localhost/tp-flightphp-crud/ws";
 

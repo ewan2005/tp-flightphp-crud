@@ -8,6 +8,7 @@
 </head>
 <body>
     <?php include('sidebar.php'); ?>
+    <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
     <div class="main-section" style="max-width:1100px;width:95vw;min-height:70vh;">
       <h2>Ajouter un client</h2>
       <form onsubmit="ajouterClient(event)" style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:end;max-width:900px;margin:0 auto 2rem auto;">
@@ -51,6 +52,7 @@
         </tbody>
       </table>
     </div>
+    </section>
 </body>
 </html>
 <script>
@@ -92,6 +94,7 @@
             } else {
                 showMessage("Erreur lors de l'ajout du client : " + (res.message || "Erreur inconnue"), "error");
             }
+            location.reload();
         });
     }
 

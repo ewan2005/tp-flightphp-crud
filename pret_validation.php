@@ -17,6 +17,7 @@ if ($_SESSION['user']['role'] !== 'admin') {
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+<section class="section dashboard-section" style="margin-left: 260px;width:80%;">
     <div class="main-section" style="max-width:1100px;width:95vw;min-height:70vh;">
       <h2>Validation des Prêts (Admin)</h2>
       <?php include('sidebar.php'); ?>
@@ -28,7 +29,8 @@ if ($_SESSION['user']['role'] !== 'admin') {
         </thead>
         <tbody></tbody>
       </table>
-      <div id="result"></div>
+    <div id="result"></div>
+    <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
       <script>
 const apiBase = "http://localhost/tp-flightphp-crud/ws";
 

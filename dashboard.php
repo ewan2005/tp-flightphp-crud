@@ -24,7 +24,7 @@ $interets = $stats['interets'];
 
 <body>
   <?php include('sidebar.php'); ?>
-  <section class="section dashboard-section">
+  <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
     <h2 class="dashboard-title">Tableau de bord</h2>
     <div class="dashboard-cards">
       <div class="card">
@@ -93,53 +93,88 @@ $interets = $stats['interets'];
   <script type="text/javascript" src="js/main.min.js?v=1628755089081"></script>
   <script type="text/javascript" src="js/chart.js"></script>
   <script>
-    // Exemple de données dynamiques pour le dashboard
-    const ctx = document.getElementById('big-line-chart').getContext('2d');
-    const chartData = {
-      labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
-      datasets: [
-        {
-          label: 'Clients',
-          data: [12, 19, 15, 22, 30, 25, 28, 32, 35, 40, 45, 50],
-          borderColor: '#1de9b6',
-          backgroundColor: 'rgba(29,233,182,0.1)',
-          fill: false,
-          tension: 0.3
-        },
-        {
-          label: 'Prêts',
-          data: [8, 14, 10, 18, 22, 20, 24, 27, 29, 33, 36, 38],
-          borderColor: '#2196f3',
-          backgroundColor: 'rgba(33,150,243,0.1)',
-          fill: false,
-          tension: 0.3
-        },
-        {
-          label: 'Montant prêté',
-          data: [1000, 2000, 1500, 3000, 3500, 3200, 4000, 4200, 4500, 4800, 5000, 5200],
-          borderColor: '#f44336',
-          backgroundColor: 'rgba(244,67,54,0.1)',
-          fill: false,
-          tension: 0.3
-        }
-      ]
-    };
-    new Chart(ctx, {
-      type: 'line',
-      data: chartData,
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: true },
-          title: { display: true, text: 'Évolution annuelle', color: '#2a4d69', font: { size: 18 } }
-        },
-        scales: {
-          x: { title: { display: true, text: 'Mois', color: '#2a4d69' } },
-          y: { title: { display: true, text: 'Valeur', color: '#2a4d69' }, beginAtZero: true }
-        }
+const ctx = document.getElementById('big-line-chart').getContext('2d');
+const stats = <?= json_encode($stats['monthly']) ?>;
+
+const chartData = {
+  labels: ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Août','Sep','Oct','Nov','Déc'],
+  datasets: [
+    {
+      label: 'Clients',
+      data: stats.clients,
+      borderColor: '#1de9b6',
+      backgroundColor: 'rgba(29,233,182,0.1)',
+      fill: false,
+      tension: 0.3
+    },
+    {
+      label: 'Prêts',
+      data: stats.prets,
+      borderColor: '#2196f3',
+      backgroundColor: 'rgba(33,150,243,0.1)',
+      fill: false,
+      tension: 0.3
+    },
+    {
+      label: 'Montant prêté (en Ar)',
+      data: stats.montants,
+      borderColor: '#f44336',
+      backgroundColor: 'rgba(244,67,54,0.1)',
+      fill: false,
+      tension: 0.3,
+      yAxisID: 'y2'
+    }
+  ]
+};
+
+new Chart(ctx, {
+  type: 'line',
+  data: chartData,
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: true },
+      title: {
+        display: true,
+        text: 'Évolution mensuelle des prêts',
+        color: '#2a4d69',
+        font: { size: 18 }
       }
-    });
-  </script>
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Mois',
+          color: '#2a4d69'
+        }
+      },
+      y: {
+        type: 'linear',
+        position: 'left',
+        title: {
+          display: true,
+          text: 'Nombre (clients/prêts)',
+          color: '#2a4d69'
+        },
+        beginAtZero: true
+      },
+      y2: {
+        type: 'linear',
+        position: 'right',
+        title: {
+          display: true,
+          text: 'Montant prêté (Ar)',
+          color: '#f44336'
+        },
+        beginAtZero: true,
+        grid: { drawOnChartArea: false }
+      }
+    }
+  }
+});
+</script>
+
 </body>
 
 </html>

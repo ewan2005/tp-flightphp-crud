@@ -17,6 +17,7 @@ $id = $_SESSION['user']['id_utilisateur'];
 </head>
 <body>
 <?php include('sidebar.php'); ?>
+<section class="section dashboard-section" style="margin-left: 260px;width:80%;">
 <div class="main-section">
     <h2>Remboursement</h2>
     <form id="remboursementForm">
@@ -35,7 +36,7 @@ $id = $_SESSION['user']['id_utilisateur'];
         <tbody></tbody>
     </table>
 </div>
-
+<section class="section dashboard-section" style="margin-left: 260px;width:80%;">
 <script>
 const apiBase = "http://localhost/tp-flightphp-crud/ws";
 
@@ -82,6 +83,7 @@ function remboursement(event) {
         } else {
             document.getElementById("okey").innerHTML = `<div class="error">${response.error}</div>`;
         }
+        location.reload();
     });
 }
 
