@@ -12,7 +12,6 @@ if (!isset($_SESSION['user'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profil client - Gestion Bancaire</title>
   <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     /* Style cohérent avec la sidebar */
     .content-wrapper {
@@ -145,31 +144,31 @@ if (!isset($_SESSION['user'])) {
 <body>
   <?php include('sidebar.php'); ?>
   <section class="main-section">
-  <div class="content-wrapper">
-    <div id="message" style="max-width:800px;margin:0 auto 1rem auto;"></div>
-    <div class="client-card">
-      <div class="client-header">
-        <h1 class="client-title">
-          <i class="fas fa-user-circle"></i>
-          <span id="client-name">Profil du client</span>
-        </h1>
-      </div>
-      
-      <div class="client-info" id="client-details">
-        <!-- Les informations seront chargées dynamiquement ici -->
-      </div>
-      
-      <div class="action-buttons">
-        <a id="lien-pret" href="#" class="btn btn-primary">
-          <i class="fas fa-hand-holding-usd"></i> Créer un prêt
-        </a>
-        <a href="liste_client.php" class="btn btn-secondary">
-          <i class="fas fa-arrow-left"></i> Retour à la liste
-        </a>
+    <div class="card" style="margin:0;max-width:100%;">
+      <div id="message" style="max-width:800px;margin:0 auto 1rem auto;"></div>
+      <div class="client-card">
+        <div class="client-header">
+          <h1 class="client-title">
+            <i class="fas fa-user-circle"></i>
+            <span id="client-name">Profil du client</span>
+          </h1>
+        </div>
+        
+        <div class="client-info" id="client-details">
+          <!-- Les informations seront chargées dynamiquement ici -->
+        </div>
+        
+        <div class="action-buttons">
+          <a id="lien-pret" href="#" class="btn btn-primary">
+            <i class="fas fa-hand-holding-usd"></i> Créer un prêt
+          </a>
+          <a href="ajout_client.php" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+          </a>
+        </div>
       </div>
     </div>
-  </div>
-  <section class="main-section">
+  </section>
   <script>
     const apiBase = "http://localhost/tp-flightphp-crud/ws";
 

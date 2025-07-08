@@ -19,11 +19,11 @@ class Pret {
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO simulation (id_utilisateur, montant, duree, taux_annuel, taux_assurance, mensualite, mensualite_assurance, mensualite_totale, cout_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
-            $data->id_utilisateur,
+            $data->id_user,
             $data->montant,
             $data->duree,
-            $data->taux_annuel,
-            $data->taux_assurance,
+            $data->taux,
+            $data->assurance,
             $data->mensualite,
             $data->mensualite_assurance,
             $data->mensualite_totale,
