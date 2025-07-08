@@ -24,7 +24,7 @@ $interets = $stats['interets'];
 
 <body>
   <?php include('sidebar.php'); ?>
-  <section class="section dashboard-section">
+  <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
     <h2 class="dashboard-title">Tableau de bord</h2>
     <div class="dashboard-cards">
       <div class="card">
