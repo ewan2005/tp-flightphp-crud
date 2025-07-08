@@ -70,6 +70,14 @@
           </a>
         </li>
       </ul>
+      <ul class="menu-list">
+        <li>
+          <a href="compare_simulation.php">
+            <span class="icon"><i class="mdi mdi-percent"></i></span>
+            <span class="menu-item-label">Ccompare simulation</span>
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </aside>
