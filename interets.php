@@ -58,6 +58,7 @@
         <button type="submit">Filtrer</button>
       </div>
     </form>
+    <div id="message" style="margin-bottom:1rem;"></div>
     <h3 style="margin-top:2.5rem;">Intérêts gagnés par mois (période choisie)</h3>
     <table id="table-interets" class="table-centered">
       <thead>
@@ -110,6 +111,11 @@ function ajax(method, url, data, callback) {
   xhr.send(data);
 }
 
+function showMessage(msg, type) {
+  const messageDiv = document.getElementById('message');
+  messageDiv.innerHTML = `<div class="${type}">${msg}</div>`;
+}
+
 document.getElementById('filtre-interets').onsubmit = function(e) {
   e.preventDefault();
   const md = document.getElementById('mois_debut').value;
@@ -121,6 +127,11 @@ document.getElementById('filtre-interets').onsubmit = function(e) {
     const tbody = document.querySelector('#table-interets-mois tbody');
     let total = 0;
     tbody.innerHTML = '';
+    if (!data || data.length === 0) {
+      showMessage('Aucun intérêt trouvé pour la période sélectionnée.', 'error');
+    } else {
+      showMessage('Données chargées avec succès.', 'success');
+    }
     // Préparer les données pour la courbe
     const labels = [];
     const dataPoints = [];

@@ -45,7 +45,7 @@ function ajax(method, url, data, callback, isJson = false) {
       if (xhr.status === 200) {
         callback(JSON.parse(xhr.responseText));
       } else {
-        document.getElementById('result').textContent = 'Erreur serveur: ' + xhr.status;
+        document.getElementById('result').innerHTML = '<div class="error">Erreur serveur: ' + xhr.status + '</div>';
       }
     }
   };
@@ -82,7 +82,7 @@ function validerPret(id) {
     pret.id_statut = 2;
     pret.id_agent = pret.id_agent || 1; // Remplacer par l'ID agent réel si besoin
     ajax("PUT", `/prets/${id}`, JSON.stringify(pret), (res) => {
-      document.getElementById('result').textContent = res.message || 'Prêt validé';
+      document.getElementById('result').innerHTML = `<div class="success">${res.message || 'Prêt validé'}</div>`;
       chargerPretsValidation();
     }, true);
   });
@@ -96,7 +96,7 @@ function rejeterPret(id) {
     pret.motif_rejet = motif;
     pret.id_agent = pret.id_agent || 1; // Remplacer par l'ID agent réel si besoin
     ajax("PUT", `/prets/${id}`, JSON.stringify(pret), (res) => {
-      document.getElementById('result').textContent = res.message || 'Prêt rejeté';
+      document.getElementById('result').innerHTML = `<div class="error">${res.message || 'Prêt rejeté'}</div>`;
       chargerPretsValidation();
     }, true);
   });
