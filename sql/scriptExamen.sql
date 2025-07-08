@@ -74,10 +74,10 @@ CREATE TABLE ef_echeance_pret (
     id_pret INT NOT NULL,
     mois_numero INT NOT NULL,                     
     date_echeance DATE NOT NULL,                  
-    montant_annuite DECIMAL(12,2) NOT NULL,       
-    part_interet DECIMAL(12,2) NOT NULL,          
-    part_capital DECIMAL(12,2) NOT NULL,          
-    reste_a_payer DECIMAL(12,2) NOT NULL,         
+    montant_annuite DECIMAL(15,2) NOT NULL,       
+    part_interet DECIMAL(15,2) NOT NULL,          
+    part_capital DECIMAL(15,2) NOT NULL,          
+    reste_a_payer DECIMAL(15,2) NOT NULL,         
     est_paye BOOLEAN DEFAULT FALSE,               
     FOREIGN KEY (id_pret) REFERENCES ef_pret(id_pret)
 );
@@ -89,7 +89,7 @@ CREATE TABLE remboursement (
     id_remboursement INT PRIMARY KEY AUTO_INCREMENT,
     id_pret INT NOT NULL,                  
     id_echeance INT,        
-    montant DECIMAL(12,2) NOT NULL,
+    montant DECIMAL(15,2) NOT NULL,
     date_remboursement DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_pret) REFERENCES ef_pret(id_pret),
     FOREIGN KEY (id_echeance) REFERENCES ef_echeance_pret(id_echeance)
@@ -98,9 +98,9 @@ CREATE TABLE remboursement (
 -- 6.7 Historique des fonds
 
 CREATE TABLE ef_historique_transaction(
-    id_pret INT AUTO_INCREMENT PRIMARY KEY,
+    id_historique INT AUTO_INCREMENT PRIMARY KEY,
     id_utilisateur INT NOT NULL,
-    montant DECIMAL(10,2),
+    montant DECIMAL(15,2),
     description VARCHAR(100),
     date DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_utilisateur) REFERENCES ef_utilisateur(id_utilisateur)
@@ -143,7 +143,7 @@ INSERT INTO ef_statut (libelle) VALUES
 
 -- 1. Établissement Financier
 INSERT INTO ef_etablissement_financier (nom, solde)
-VALUES ('EFI Bank', 10000000.00);
+VALUES ('EFI Bank',0);
 
 
 

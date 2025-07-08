@@ -22,9 +22,9 @@ class DashboardController {
             'montantTotal' => $montantTotal,
             'interets' => $interets,
             'monthly' => [
-                'clients' => [2, 4, 3, 6, 5, 7, 4, 6, 5, 3, 4, 3],
-                'prets' => [1, 3, 2, 4, 3, 5, 2, 4, 3, 3, 2, 3],
-                'montants' => [150000, 320000, 210000, 380000, 430000, 460000, 400000, 470000, 480000, 500000, 520000, 530000]
+                'clients' => $nbClients,
+                'prets' => $nbPrets,
+                'montants' => $montantTotal
             ]
         ];
     }
