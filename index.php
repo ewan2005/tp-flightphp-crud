@@ -33,8 +33,8 @@
       <h2>Connexion</h2>
       <div id="message"></div>
       <form id="loginForm" onsubmit="login(event)">
-        <input type="email" id="email" placeholder="Email" required><br>
-        <input type="password" id="mot_de_passe" placeholder="Mot de passe" required><br>
+        <input type="email" id="email" values="admin@gmail.com" placeholder="Email" required><br>
+        <input type="password" id="mot_de_passe" values="admin123" placeholder="Mot de passe" required><br>
         <button type="submit">Se connecter</button>
       </form>
     </div>

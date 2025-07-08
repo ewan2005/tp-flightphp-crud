@@ -150,28 +150,13 @@ CREATE TABLE ef_echeancier (
     FOREIGN KEY (id_pret) REFERENCES ef_pret(id_pret)
 );
 
-
-
 -- 9. INSERTION DE STATUTS PAR DÉFAUT
 INSERT INTO ef_statut (libelle) VALUES
 ('En attente'),
 ('Validé'),
 ('Rejeté');
 
--- 1. Établissement Financier
-INSERT INTO ef_etablissement_financier (nom, solde)
-VALUES ('EFI Bank',0);
-
-
-
 -- Supposons que l’ID généré est 1
 -- 2. Administrateur
 INSERT INTO ef_utilisateur (nom, email, mot_de_passe, role, id_etablissement)
 VALUES ('Admin Principal', 'admin@gmail.com', 'admin123', 'admin', 1);
-
--- 3. Agents
-INSERT INTO ef_utilisateur (nom, email, mot_de_passe, role, id_etablissement)
-VALUES 
-('Agent One', 'agent1@gmail.com', 'agent123', 'agent', 1),
-('Agent Two', 'agent2@gmail.com', 'agent456', 'agent', 1);
-
