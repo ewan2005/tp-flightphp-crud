@@ -10,6 +10,7 @@ require 'routes/client_routes.php';
 require 'routes/agent_routes.php';
 require 'routes/client_routes.php';
 require 'routes/interet_routes.php';
+require 'routes/solde_mensuel_routes.php';
 
 // ini_set('display_errors', 1);
 // ini_set('display_startup_errors', 1);
