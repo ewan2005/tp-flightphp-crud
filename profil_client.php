@@ -144,7 +144,7 @@ if (!isset($_SESSION['user'])) {
 </head>
 <body>
   <?php include('sidebar.php'); ?>
-  
+  <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
   <div class="content-wrapper">
     <div id="message" style="max-width:800px;margin:0 auto 1rem auto;"></div>
     <div class="client-card">
@@ -169,7 +169,7 @@ if (!isset($_SESSION['user'])) {
       </div>
     </div>
   </div>
-
+  <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
   <script>
     const apiBase = "http://localhost/tp-flightphp-crud/ws";
 

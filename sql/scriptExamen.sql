@@ -58,11 +58,15 @@ CREATE TABLE ef_pret (
     date_demande DATE NOT NULL,
     id_statut INT NOT NULL,
     id_agent INT NOT NULL,
+    assurance INT NOT NULL DEFAULT 0, -- 0 pour non, 1 pour oui
+    delai_premier_remboursement INT DEFAULT 0,
     FOREIGN KEY (id_client) REFERENCES ef_client(id_client),
     FOREIGN KEY (id_type_pret) REFERENCES ef_type_pret(id_type_pret),
     FOREIGN KEY (id_statut) REFERENCES ef_statut(id_statut),
     FOREIGN KEY (id_agent) REFERENCES ef_utilisateur(id_utilisateur)
 );
+
+-- ALTER TABLE ef_pret ADD COLUMN delai_premier_remboursement INT DEFAULT 0;
 
 --reboursement
 CREATE TABLE ef_echeance_pret (
@@ -77,6 +81,8 @@ CREATE TABLE ef_echeance_pret (
     est_paye BOOLEAN DEFAULT FALSE,               
     FOREIGN KEY (id_pret) REFERENCES ef_pret(id_pret)
 );
+
+ALTER TABLE ef_echeance_pret ADD COLUMN assurance DOUBLE DEFAULT 0;
 
 
 CREATE TABLE remboursement (

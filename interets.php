@@ -9,6 +9,7 @@
 </head>
 <body>
   <?php include('sidebar.php'); ?>
+  <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
   <div class="main-section">
     <h2>Détail des intérêts gagnés par prêt</h2>
     <form id="filtre-interets">
@@ -97,6 +98,7 @@
     </table>
     <canvas id="chart-interets" height="300"></canvas>
   </div>
+  <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
   <script>
 const apiBase = "ws";
 function ajax(method, url, data, callback) {

@@ -21,6 +21,7 @@ $id = $_SESSION['user']['id_utilisateur'];
 </head>
 <body>
     <?php include('sidebar.php'); ?>
+    <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
     <section class="dashboard-section" style="max-width:600px;margin:40px auto 0 auto;">
         <div class="card" style="margin:0;max-width:100%;">
             <div class="card-content">
@@ -56,6 +57,7 @@ $id = $_SESSION['user']['id_utilisateur'];
             </div>
         </div>
     </section>
+    </section>
     <script>
         const apiBase = "http://localhost/tp-flightphp-crud/ws";
         function ajax(method, url, data, callback) {
@@ -83,6 +85,7 @@ $id = $_SESSION['user']['id_utilisateur'];
                 });
             });
         }
+
         function verification() {
             const errorDiv = document.getElementById("erreur");
             const successDiv = document.getElementById("message");
@@ -112,6 +115,7 @@ $id = $_SESSION['user']['id_utilisateur'];
                     });
                 });
             }
+            // location.reload();
         }
         window.onload = function() {
             chargerFond();
@@ -122,6 +126,7 @@ $id = $_SESSION['user']['id_utilisateur'];
             successDiv.className = "success";
             successDiv.style.display = "block";
             document.getElementById("montant").value = "";
+            chargerFond(); // Recharge le tableau immédiatement
             setTimeout(() => {
                 successDiv.style.display = "none";
             }, 5000);

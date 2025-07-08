@@ -17,7 +17,7 @@ class Pret {
 
     public static function create($data) {
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO ef_pret (id_client, id_type_pret, montant, duree, date_demande, id_statut, id_agent) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $db->prepare("INSERT INTO ef_pret (id_client, id_type_pret, montant, duree, date_demande, id_statut, id_agent,assurance,delai_premier_remboursement ) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)");
         $stmt->execute([
             $data->id_client,
             $data->id_type_pret,
@@ -25,14 +25,16 @@ class Pret {
             $data->duree,
             $data->date_demande,
             2, // En attente
-            $data->id_agent
+            $data->id_agent,
+            isset($data->assurance) ? $data->assurance : 0, // Assurance, par défaut 0 (non)
+            $data->delai_remboursement ?? 0 // Délai de premier remboursement, par défaut 0
         ]);
         return $db->lastInsertId();
     }
 
     public static function update($id, $data) {
         $db = getDB();
-        $stmt = $db->prepare("UPDATE ef_pret SET id_client=?, id_type_pret=?, montant=?, duree=?, date_demande=?, id_agent=? WHERE id_pret=?");
+        $stmt = $db->prepare("UPDATE ef_pret SET id_client=?, id_type_pret=?, montant=?, duree=?, date_demande=?, id_agent=?,assurance=? WHERE id_pret=?");
         $stmt->execute([
             $data->id_client,
             $data->id_type_pret,
@@ -40,7 +42,9 @@ class Pret {
             $data->duree,
             $data->date_demande,
             $data->id_agent,
-            $id
+            $id,
+            $data->assurance ?? 0, // Assurance, par défaut 0 (non)
+            $data->delai_remboursement ?? 0 // Délai de premier remboursement, par défaut 0
         ]);
     }
 
