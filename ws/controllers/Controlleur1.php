@@ -112,7 +112,7 @@ class Controlleur1
             $idEtablissement = $etabRow['id_etablissement'];
 
             $db->beginTransaction();
-
+            $model = Model1::getInfoPret($idPret);
             // Vérifie si les échéances existent déjà
             $stmt = $db->prepare("SELECT COUNT(*) FROM ef_echeance_pret WHERE id_pret = ?");
             $stmt->execute([$idPret]);
@@ -136,29 +136,37 @@ class Controlleur1
                 $dateEcheance = clone $dateDemande;
                 $dateEcheance->modify('+1 month');
 
-                for ($mois = 1; $mois <= $duree; $mois++) {
-                    $interet = round($capitalRestant * $i, 2);
-                    $partCapital = round($A - $interet, 2);
-                    $reste = round($capitalRestant - $partCapital, 2);
+                    for ($mois = 1; $mois <= $duree; $mois++) {
+                        $interet = round($capitalRestant * $i, 2);
+                        $partCapital = round($A - $interet, 2);
+                        $reste = round($capitalRestant - $partCapital, 2);
 
-                    $stmtInsert = $db->prepare("
-                        INSERT INTO ef_echeance_pret
-                        (id_pret, mois_numero, date_echeance, montant_annuite, part_interet, part_capital, reste_a_payer, est_paye)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, FALSE)
-                    ");
-                    $stmtInsert->execute([
-                        $idPret,
-                        $mois,
-                        $dateEcheance->format('Y-m-d'),
-                        $A,
-                        $interet,
-                        $partCapital,
-                        $reste > 0 ? $reste : 0
-                    ]);
+                        // Correction ici : calcul de la mensualité d'assurance
+                        $tauxAssurance = floatval($model['assurance']); // ex: 1 pour 1%
+                        $mensualiteAssurance = round($montant * ($tauxAssurance / 100), 2);
 
-                    $capitalRestant = $reste > 0 ? $reste : 0;
-                    $dateEcheance->modify('+1 month');
-                }
+                        // Le montant total à payer pour cette échéance
+                        $montantTotalEcheance = $A + $mensualiteAssurance;
+
+                        $stmtInsert = $db->prepare("
+                            INSERT INTO ef_echeance_pret
+                            (id_pret, mois_numero, date_echeance, montant_annuite, part_interet, part_capital, reste_a_payer, assurance, est_paye)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, FALSE)
+                        ");
+                        $stmtInsert->execute([
+                            $idPret,
+                            $mois,
+                            $dateEcheance->format('Y-m-d'),
+                            $A,
+                            $interet,
+                            $partCapital,
+                            $reste > 0 ? $reste : 0,
+                            $mensualiteAssurance
+                        ]); 
+
+                        $capitalRestant = $reste > 0 ? $reste : 0;
+                        $dateEcheance->modify('+1 month');
+                    }
             }
 
             // Remboursement des échéances tant que possible

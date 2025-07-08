@@ -23,6 +23,7 @@ class Model1 {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+
     public static function create($data) {
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO ef_ajout_fonds (id_utilisateur, montant, date_ajout) VALUES (?, ?, ?)");
@@ -76,8 +77,8 @@ class Model1 {
             FROM ef_pret ep
             LEFT JOIN ef_echeance_pret ec ON ep.id_pret = ec.id_pret
             WHERE ep.id_client = ?
-            AND (ec.est_paye = FALSE OR ec.est_paye IS NULL)
-            ORDER BY ep.id_pret, ec.mois_numero
+            AND (ec.est_paye = FALSE OR ec.est_paye IS NULL) GROUP BY ep.id_pret
+            ORDER BY ep.id_pret, ec.mois_numero 
         ");
         $stmt->execute([$id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -102,7 +103,7 @@ class Model1 {
     public static function getInfoPret($idPret)
     {
         $db = getDB();
-        $stmt = $db->prepare("SELECT montant, duree, date_demande FROM ef_pret WHERE id_pret = ?");
+        $stmt = $db->prepare("SELECT montant, duree, date_demande,assurance FROM ef_pret WHERE id_pret = ?");
         $stmt->execute([$idPret]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     } 

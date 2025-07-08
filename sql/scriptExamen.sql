@@ -79,6 +79,8 @@ CREATE TABLE ef_echeance_pret (
     FOREIGN KEY (id_pret) REFERENCES ef_pret(id_pret)
 );
 
+ALTER TABLE ef_echeance_pret ADD COLUMN assurance DOUBLE DEFAULT 0;
+
 
 CREATE TABLE remboursement (
     id_remboursement INT PRIMARY KEY AUTO_INCREMENT,

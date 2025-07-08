@@ -26,6 +26,14 @@ $id = $_SESSION['user']['id_utilisateur'];
         <button type="submit" class="button" style="margin-top:1rem;min-width:180px;">Valider</button>
         <div id="okey" style="width:100%;margin-top:1rem;"></div>
     </form>
+    <table id="echeancier">
+        <thead>
+            <tr>
+              <th>Id echeacne</th><th>date Echeance</th><th>montant_annuite</th><th>assurance</th><th>interet</th><th>part capital</th><th>reste a payer</th><th>est Paye ?</th>
+            </tr>
+          </thead>
+        <tbody></tbody>
+    </table>
 </div>
 
 <script>
@@ -51,6 +59,8 @@ function ajax(method, url, data, callback) {
     };
     xhr.send(data);
 }
+
+
 
 function remboursement(event) {
     event.preventDefault();
@@ -125,7 +135,7 @@ function getPrets(clientId) {
         select.innerHTML = `<option value="">-- Choisir le prêt --</option>`;
 
         data.forEach(pret => {
-            const option = new Option(`id_echeance: ${pret.id_echeance} | Montant: ${pret.montant} Ar | Durée: ${pret.duree} mois`, pret.id_pret);
+            const option = new Option(` Montant: ${pret.montant} Ar | Durée: ${pret.duree} mois`, pret.id_pret);
             select.appendChild(option);
         });
 
@@ -134,6 +144,33 @@ function getPrets(clientId) {
 
         select.addEventListener("change", () => {
             getMontantAnnuite(select.value);
+        });
+    });
+}
+
+function chargerEcheancier(idPret,montant){
+    ajax("GET" , `/echeance/${idPret}`, null, (data)=>{
+        const tbody = document.querySelector("#echeancier tbody");
+        tbody.innerHTML = ""; // vider d'abord le tableau
+
+        if (!data || data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="8" style="color:red;">Aucune échéance trouvée.</td></tr>`;
+            return;
+        }
+
+        data.forEach(ech=>{
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${ech.id_echeance}</td>
+                <td>${ech.date_echeance}</td>
+                <td>${parseFloat(ech.montant_annuite).toFixed(2)}</td>
+                <td>${ech.assurance}</td>
+                <td>${parseFloat(ech.part_interet).toFixed(2)}</td>
+                <td>${parseFloat(ech.part_capital).toFixed(2)}</td>
+                <td>${parseFloat(ech.reste_a_payer).toFixed(2)}</td>
+                <td>${ech.est_paye == 1 ? "Oui" : "Non"}</td>
+            `;
+            tbody.appendChild(tr);
         });
     });
 }
@@ -155,6 +192,8 @@ function getMontantAnnuite(idPret) {
         html += `<input type="number" name="montant" step="0.01" required value="${total.toFixed(2)}">`;
         html += `<input type="hidden" name="idPret" value="${idPret}">`;
         sectionMontant.innerHTML = html;
+
+        chargerEcheancier(idPret,assurance);
     });
 }
 
