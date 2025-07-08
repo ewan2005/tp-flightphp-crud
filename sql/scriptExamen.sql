@@ -150,6 +150,9 @@ CREATE TABLE ef_echeancier (
     FOREIGN KEY (id_pret) REFERENCES ef_pret(id_pret)
 );
 
+INSERT INTO ef_etablissement_financier (nom, solde) VALUES
+('EFI Bank', 10000000.00);
+
 -- 9. INSERTION DE STATUTS PAR DÉFAUT
 INSERT INTO ef_statut (libelle) VALUES
 ('En attente'),
