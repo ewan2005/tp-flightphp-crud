@@ -72,6 +72,9 @@
       </ul>
       <ul class="menu-list">
         <li>
+          <a href="solde_etablissement.php">
+            <span class="icon"><i class="mdi mdi-cash"></i></span>
+            <span class="menu-item-label">Solde Établissement</span>
           <a href="compare_simulation.php">
             <span class="icon"><i class="mdi mdi-percent"></i></span>
             <span class="menu-item-label">Ccompare simulation</span>

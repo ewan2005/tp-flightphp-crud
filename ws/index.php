@@ -10,6 +10,8 @@ require 'routes/client_routes.php';
 require 'routes/agent_routes.php';
 require 'routes/client_routes.php';
 require 'routes/interet_routes.php';
+require 'routes/solde_mensuel_routes.php';
+
 require 'routes/simulation_routes.php';
 require 'routes/CompSimulation.php';
 

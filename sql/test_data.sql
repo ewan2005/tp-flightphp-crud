@@ -1,8 +1,8 @@
 -- Jeu de données de test pour projet gestion de prêts
 
 -- 1. Établissement financier
-INSERT INTO ef_etablissement_financier (id_etablissement, nom, solde) VALUES
-(1, 'EFI Bank', 10000000.00);
+INSERT INTO ef_etablissement_financier (nom, solde) VALUES
+('EFI Bank', 10000000.00);
 
 -- 2. Statuts
 -- INSERT INTO ef_statut (id_statut, libelle) VALUES

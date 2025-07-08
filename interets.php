@@ -5,7 +5,6 @@
   <link rel="stylesheet" href="css/main.css">
   <title>Intérêts gagnés par prêt</title>
   <script src="js/chart.js"></script>
-  <!-- Le CSS est maintenant dans main.css -->
 </head>
 <body>
   <?php include('sidebar.php'); ?>
