@@ -17,7 +17,7 @@ class Pret {
 
     public static function create($data) {
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO ef_pret (id_client, id_type_pret, montant, duree, date_demande, id_statut, id_agent,assurance) VALUES (?, ?, ?, ?, ?, ?, ?,?)");
+        $stmt = $db->prepare("INSERT INTO ef_pret (id_client, id_type_pret, montant, duree, date_demande, id_statut, id_agent,assurance,delai_premier_remboursement ) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)");
         $stmt->execute([
             $data->id_client,
             $data->id_type_pret,
@@ -26,7 +26,8 @@ class Pret {
             $data->date_demande,
             2, // En attente
             $data->id_agent,
-            isset($data->assurance) ? $data->assurance : 0 // Assurance, par défaut 0 (non)
+            isset($data->assurance) ? $data->assurance : 0, // Assurance, par défaut 0 (non)
+            $data->delai_remboursement ?? 0 // Délai de premier remboursement, par défaut 0
         ]);
         return $db->lastInsertId();
     }
@@ -42,7 +43,8 @@ class Pret {
             $data->date_demande,
             $data->id_agent,
             $id,
-            $data->assurance ?? 0 // Assurance, par défaut 0 (non)
+            $data->assurance ?? 0, // Assurance, par défaut 0 (non)
+            $data->delai_remboursement ?? 0 // Délai de premier remboursement, par défaut 0
         ]);
     }
 

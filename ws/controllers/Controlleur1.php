@@ -92,143 +92,142 @@ class Controlleur1
         Flight::json($model);
     }
 
-    public static function traitement_annuite()
-    {
-        $db = getDB();
-        $idClient = $_POST["idClient"] ?? null;
-        $idPret = $_POST['idPret'] ?? null;
-        $montantRecu = floatval($_POST['montant'] ?? 0);
+public static function traitement_annuite()
+{
+    $db = getDB();
+    $idClient = $_POST["idClient"] ?? null;
+    $idPret = $_POST['idPret'] ?? null;
+    $montantRecu = floatval($_POST['montant'] ?? 0);
 
-        try {
-            if (!$idClient || !$idPret || $montantRecu <= 0) {
-                throw new Exception("Paramètres invalides.");
-            }
-
-            // Récupérer l'établissement de l'utilisateur
-            $etabRow = Model1::getById($idClient);
-            if (!$etabRow || !isset($etabRow['id_etablissement'])) {
-                throw new Exception("Établissement non trouvé pour l'utilisateur.");
-            }
-            $idEtablissement = $etabRow['id_etablissement'];
-
-            $db->beginTransaction();
-            $model = Model1::getInfoPret($idPret);
-            // Vérifie si les échéances existent déjà
-            $stmt = $db->prepare("SELECT COUNT(*) FROM ef_echeance_pret WHERE id_pret = ?");
-            $stmt->execute([$idPret]);
-            $nbEcheances = (int) $stmt->fetchColumn();
-
-            if ($nbEcheances === 0) {
-                $pret = Model1::getInfoPret($idPret);
-                if (!$pret) {
-                    throw new Exception("Prêt introuvable.");
-                }
-
-                $montant = (float) $pret['montant'];
-                $duree = (int) $pret['duree'];
-                $dateDemande = new DateTime($pret['date_demande']);
-                $tauxAnnuel = 0.10;
-
-                $i = $tauxAnnuel / 12;
-                $A = round($montant * ($i / (1 - pow(1 + $i, -$duree))), 2);
-
-                $capitalRestant = $montant;
-                $dateEcheance = clone $dateDemande;
-                $dateEcheance->modify('+1 month');
-
-                    for ($mois = 1; $mois <= $duree; $mois++) {
-                        $interet = round($capitalRestant * $i, 2);
-                        $partCapital = round($A - $interet, 2);
-                        $reste = round($capitalRestant - $partCapital, 2);
-
-                        // Correction ici : calcul de la mensualité d'assurance
-                        $tauxAssurance = floatval($model['assurance']); // ex: 1 pour 1%
-                        $mensualiteAssurance = round($montant * ($tauxAssurance / 100), 2);
-
-                        // Le montant total à payer pour cette échéance
-                        $montantTotalEcheance = $A + $mensualiteAssurance;
-
-                        $stmtInsert = $db->prepare("
-                            INSERT INTO ef_echeance_pret
-                            (id_pret, mois_numero, date_echeance, montant_annuite, part_interet, part_capital, reste_a_payer, assurance, est_paye)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, FALSE)
-                        ");
-                        $stmtInsert->execute([
-                            $idPret,
-                            $mois,
-                            $dateEcheance->format('Y-m-d'),
-                            $A,
-                            $interet,
-                            $partCapital,
-                            $reste > 0 ? $reste : 0,
-                            $mensualiteAssurance
-                        ]); 
-
-                        $capitalRestant = $reste > 0 ? $reste : 0;
-                        $dateEcheance->modify('+1 month');
-                    }
-            }
-
-            // Remboursement des échéances tant que possible
-            $stmt = $db->prepare("SELECT * FROM ef_echeance_pret WHERE id_pret = ? AND est_paye = FALSE ORDER BY mois_numero ASC");
-            $stmt->execute([$idPret]);
-            $echeances = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            if (!$echeances || count($echeances) === 0) {
-                throw new Exception("Toutes les échéances sont déjà remboursées.");
-            }
-
-            $echeancesPayees = 0;
-            $montantInitial = $montantRecu;
-
-            foreach ($echeances as $echeance) {
-                $montantEcheance = floatval($echeance['montant_annuite']);
-
-                if ($montantRecu >= $montantEcheance) {
-                    // Marquer comme payée
-                    $update = $db->prepare("
-                        UPDATE ef_echeance_pret
-                        SET est_paye = TRUE, reste_a_payer = 0
-                        WHERE id_echeance = ?
-                    ");
-                    $update->execute([$echeance['id_echeance']]);
-
-                    // Insérer remboursement
-                    $insert = $db->prepare("
-                        INSERT INTO remboursement (id_pret, id_echeance, montant)
-                        VALUES (?, ?, ?)
-                    ");
-                    $insert->execute([$idPret, $echeance['id_echeance'], $montantEcheance]);
-
-                    $montantRecu -= $montantEcheance;
-                    $echeancesPayees++;
-                } else {
-                    break; // Montant insuffisant pour une autre échéance
-                }
-            }
-
-            if ($echeancesPayees === 0) {
-                throw new Exception("Montant insuffisant pour rembourser une échéance.");
-            }
-
-            // Mise à jour du solde dans ef_etablissement_financier
-            $montantTotalRembourse = $montantInitial - $montantRecu;
-            Model1::update($idEtablissement, (object)["solde" => $montantTotalRembourse]);
-
-            $db->commit();
-
-            Flight::json([
-                "success" => true,
-                "message" => "$echeancesPayees échéance(s) remboursée(s) avec succès.",
-                "reste" => $montantRecu
-            ]);
-        } catch (Exception $e) {
-            $db->rollBack();
-            Flight::json([
-                "success" => false,
-                "error" => $e->getMessage()
-            ], 500);
+    try {
+        if (!$idClient || !$idPret || $montantRecu <= 0) {
+            throw new Exception("Paramètres invalides.");
         }
+
+        // Récupérer l'établissement de l'utilisateur
+        $etabRow = Model1::getById($idClient);
+        if (!$etabRow || !isset($etabRow['id_etablissement'])) {
+            throw new Exception("Établissement non trouvé pour l'utilisateur.");
+        }
+        $idEtablissement = $etabRow['id_etablissement'];
+
+        $db->beginTransaction();
+        $model = Model1::getInfoPret($idPret);
+        
+        // Vérifie si les échéances existent déjà
+        $stmt = $db->prepare("SELECT COUNT(*) FROM ef_echeance_pret WHERE id_pret = ?");
+        $stmt->execute([$idPret]);
+        $nbEcheances = (int) $stmt->fetchColumn();
+
+        if ($nbEcheances === 0) {
+            $pret = Model1::getInfoPret($idPret);
+            if (!$pret) {
+                throw new Exception("Prêt introuvable.");
+            }
+
+            $montant = (float) $pret['montant'];
+            $duree = (int) $pret['duree'];
+            $dateDemande = new DateTime($pret['date_demande']);
+            $tauxAnnuel = 0.10;
+            $delaiPremierRemboursement = (int) ($pret['delai_premier_remboursement'] ?? 0);
+
+            $i = $tauxAnnuel / 12;
+            $A = round($montant * ($i / (1 - pow(1 + $i, -$duree))), 2);
+
+            $capitalRestant = $montant;
+            $dateEcheance = clone $dateDemande;
+            // Application du délai avant première échéance
+            $dateEcheance->modify('+'.$delaiPremierRemboursement.' month');
+
+            for ($mois = 1; $mois <= $duree; $mois++) {
+                $interet = round($capitalRestant * $i, 2);
+                $partCapital = round($A - $interet, 2);
+                $reste = round($capitalRestant - $partCapital, 2);
+
+                $tauxAssurance = floatval($model['assurance']);
+                $mensualiteAssurance = round($montant * ($tauxAssurance / 100), 2);
+
+                $montantTotalEcheance = $A + $mensualiteAssurance;
+
+                $stmtInsert = $db->prepare("
+                    INSERT INTO ef_echeance_pret
+                    (id_pret, mois_numero, date_echeance, montant_annuite, part_interet, part_capital, reste_a_payer, assurance, est_paye)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, FALSE)
+                ");
+                $stmtInsert->execute([
+                    $idPret,
+                    $mois,
+                    $dateEcheance->format('Y-m-d'),
+                    $A,
+                    $interet,
+                    $partCapital,
+                    $reste > 0 ? $reste : 0,
+                    $mensualiteAssurance
+                ]); 
+
+                $capitalRestant = $reste > 0 ? $reste : 0;
+                $dateEcheance->modify('+1 month');
+            }
+        }
+
+        // Remboursement des échéances
+        $stmt = $db->prepare("SELECT * FROM ef_echeance_pret WHERE id_pret = ? AND est_paye = FALSE ORDER BY mois_numero ASC");
+        $stmt->execute([$idPret]);
+        $echeances = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!$echeances || count($echeances) === 0) {
+            throw new Exception("Toutes les échéances sont déjà remboursées.");
+        }
+
+        $echeancesPayees = 0;
+        $montantInitial = $montantRecu;
+
+        foreach ($echeances as $echeance) {
+            $montantEcheance = floatval($echeance['montant_annuite']) + floatval($echeance['assurance']);
+
+            if ($montantRecu >= $montantEcheance) {
+                $update = $db->prepare("
+                    UPDATE ef_echeance_pret
+                    SET est_paye = TRUE, reste_a_payer = 0
+                    WHERE id_echeance = ?
+                ");
+                $update->execute([$echeance['id_echeance']]);
+
+                $insert = $db->prepare("
+                    INSERT INTO remboursement (id_pret, id_echeance, montant)
+                    VALUES (?, ?, ?)
+                ");
+                $insert->execute([$idPret, $echeance['id_echeance'], $montantEcheance]);
+
+                $montantRecu -= $montantEcheance;
+                $echeancesPayees++;
+            } else {
+                break;
+            }
+        }
+
+        if ($echeancesPayees === 0) {
+            throw new Exception("Montant insuffisant pour rembourser une échéance.");
+        }
+
+        // Mise à jour du solde
+        $montantTotalRembourse = $montantInitial - $montantRecu;
+        Model1::update($idEtablissement, (object)["solde" => $montantTotalRembourse]);
+
+        $db->commit();
+
+        Flight::json([
+            "success" => true,
+            "message" => "$echeancesPayees échéance(s) remboursée(s) avec succès.",
+            "reste" => $montantRecu
+        ]);
+    } catch (Exception $e) {
+        $db->rollBack();
+        Flight::json([
+            "success" => false,
+            "error" => $e->getMessage()
+        ], 500);
     }
+}
 
 }

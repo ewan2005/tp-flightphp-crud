@@ -48,6 +48,10 @@ $user = $_SESSION['user'];
             <label>Assurance :</label>
             <input type="number" id="assurance" step="0.01" min="0" required style="width:100%;">
           </div>
+          <div>
+              <label>Délai avant 1er remboursement (mois) :</label>
+              <input type="number" id="delai_remboursement" min="0" value="0" style="width:100%;">
+          </div>
           <!-- <div>
             <label>Agent :</label>
             <input type="text" id="agent" style="width:100%;">
@@ -241,6 +245,7 @@ function ajouterOuModifierPret() {
   const resultDiv = document.getElementById("result");
   const echeancierDiv = document.getElementById("echeancier");
   const assurance = document.getElementById("assurance").value;
+  const delai_remboursement = document.getElementById("delai_remboursement").value;
   const data = {
     id_client,
     id_type_pret,
@@ -248,7 +253,8 @@ function ajouterOuModifierPret() {
     duree,
     date_demande,
     id_agent,
-    assurance
+    assurance,
+    delai_remboursement
   };
 
   const xhr = new XMLHttpRequest();
@@ -311,6 +317,7 @@ function remplirFormPret(p) {
   document.getElementById("duree").value = p.duree;
   document.getElementById("date_demande").value = p.date_demande;
   document.getElementById("assurance").value = p.assurance || 0; // Assure que l'assurance est définie
+  document.getElementById("delai_remboursement").value = p.delai_premier_remboursement || 0; // Assure que le délai est défini
   // if (document.getElementById("id_agent"))
   //   document.getElementById("id_agent").value = p.id_agent;
 }
@@ -331,6 +338,7 @@ function resetFormPret() {
   document.getElementById("duree").value = "";
   document.getElementById("date_demande").value = "";
   document.getElementById("assurance").value = 0; // Réinitialise l'assurance à 0
+  document.getElementById("delai_remboursement").value = 0; // Réinitialise le délai à 0
   // if (document.getElementById("id_agent"))
   //   document.getElementById("id_agent").value = "";
 }

@@ -42,7 +42,7 @@ class PretController {
         // 5. Débiter l'établissement
         Etablissement::debiter($typePret['id_etablissement'], $data->montant);
         // 6. Générer l'échéancier
-        Echeancier::generer($id, $data->montant, $typePret['taux_annuel'], $data->duree, $data->date_demande);
+        Echeancier::generer($id, $data->montant, $typePret['taux_annuel'], $data->duree, $data->date_demande,$data->delai_remboursement);
         Flight::json(['success'=>true, 'message' => 'Demande de prêt enregistrée', 'id' => $id]);
     }
 
