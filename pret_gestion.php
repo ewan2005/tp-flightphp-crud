@@ -68,6 +68,7 @@ $user = $_SESSION['user'];
           </table>
           <script>
 const apiBase = "http://localhost/tp-flightphp-crud/ws";
+const user = <?php echo json_encode($user); ?>;
 
 function ajax(method, url, data, callback) {
   const xhr = new XMLHttpRequest();
@@ -170,8 +171,10 @@ function enregistrerSimulation() {
   const mensualite = (montant * tauxMensuel) / (1- Math.pow(1+tauxMensuel,-duree));
   const mensualite_assurance = montant * (assurance / 100);
   const mensualite_totale = mensualite + mensualite_assurance;
-
+  const id_user = user.id_utilisateur;
+  const cout_total = mensualite_totale * duree;
   ajax("POST", "/simulation", {
+    id_user,
     montant,
     duree,
     taux,
@@ -179,7 +182,8 @@ function enregistrerSimulation() {
     delai_remboursement,
     mensualite,
     mensualite_assurance,
-    mensualite_totale
+    mensualite_totale,
+    cout_total
   }, (response) => {
     if (response.success) {
       afficherMessage("Simulation enregistrée avec succès !");
@@ -262,7 +266,6 @@ function chargerPrets() {
   });
 }
 
-const user = <?php echo json_encode($user); ?>;
 
 function ajouterOuModifierPret() {
   const id = document.getElementById("id_pret").value;

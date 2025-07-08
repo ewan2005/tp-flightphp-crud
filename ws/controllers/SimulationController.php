@@ -2,7 +2,8 @@
 require_once __DIR__ . '/../models/Pret.php';
 
 class SimulationController {
-    public static function create($data) {
+    public static function create() {
+        $data = Flight::request()->data;
         $id = Pret::createSimulation($data);
         if ($id) {
             Flight::json(['success' => true, 'id_simulation' => $id]);
