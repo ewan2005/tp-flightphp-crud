@@ -131,6 +131,7 @@ function simulerPret(){ //hijerevena hoe somme que le client doit payer toute la
   const mensualite_assurance = montant * (assurance / 100);
   const mensualite_totale = mensualite + mensualite_assurance;
 
+  
   // Affichage simulation
   const resultDiv = document.getElementById("result");
   resultDiv.innerHTML=`
@@ -143,6 +144,7 @@ function simulerPret(){ //hijerevena hoe somme que le client doit payer toute la
       Taux annuel : ${taux} %<br>
       Taux assurance : ${assurance} %<br>
       <button onclick='ajouterOuModifierPret()'>Valider le pret</button>
+      <button id="btnEnregistrerSimulation" onclick='enregistrerSimulation()'>Enregistrer la simulation</button>
     </div>
   `;
 
@@ -154,6 +156,40 @@ function simulerPret(){ //hijerevena hoe somme que le client doit payer toute la
   echeancierHtml += '</table>';
   document.getElementById("echeancier").innerHTML = echeancierHtml;
 }
+
+function enregistrerSimulation() {
+  const montant = parseFloat(document.getElementById("montant").value);
+  const duree = parseInt(document.getElementById("duree").value, 10);
+  const typePretSelect = document.getElementById("type_pret");
+  const selectedOption = typePretSelect.options[typePretSelect.selectedIndex];
+  const taux = parseFloat(selectedOption.getAttribute("data-taux")) || 0;
+  const assurance = parseFloat(document.getElementById("assurance").value) || 0;
+  const delai_remboursement = parseInt(document.getElementById("delai_remboursement").value) || 0;
+
+  const tauxMensuel = taux / 100 / 12;
+  const mensualite = (montant * tauxMensuel) / (1- Math.pow(1+tauxMensuel,-duree));
+  const mensualite_assurance = montant * (assurance / 100);
+  const mensualite_totale = mensualite + mensualite_assurance;
+
+  ajax("POST", "/simulation", {
+    montant,
+    duree,
+    taux,
+    assurance,
+    delai_remboursement,
+    mensualite,
+    mensualite_assurance,
+    mensualite_totale
+  }, (response) => {
+    if (response.success) {
+      afficherMessage("Simulation enregistrée avec succès !");
+      document.getElementById("btnEnregistrerSimulation").style.display = "none";
+    } else {
+      afficherMessage("Erreur lors de l'enregistrement : " + response.message, "error");
+    }
+  });
+}
+
 
 function chargerClientsSelect() {
   const params = new URLSearchParams(window.location.search);
