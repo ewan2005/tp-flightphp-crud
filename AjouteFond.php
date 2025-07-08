@@ -30,7 +30,7 @@ $id = $_SESSION['user']['id_utilisateur'];
                 <input type="hidden" id="id" name="id" value="<?php echo $id ?>">
                 <div class="form-group">
                     <label for="montant" class="form-label">Montant à ajouter</label>
-                    <input type="number" name="montant" id="montant" class="form-input" placeholder="Entrez un montant positif">
+                    <input type="number" name="montant" id="montant" class="form-input" placeholder="Entrez le montant à ajouter">
                 </div>
                 <button type="button" onclick="return verification()" class="btn-primary">
                     <i class="fas fa-check-circle mr-1"></i> Valider

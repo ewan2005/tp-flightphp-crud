@@ -34,15 +34,15 @@ $user = $_SESSION['user'];
           </div>
           <div>
             <label>Montant :</label>
-            <input type="number" id="montant" step="0.01" min="0" required style="width:100%;">
+            <input type="number" id="montant" step="0.01" min="0" required style="width:100%;" placeholder="Montant du prêt">
           </div>
           <div>
             <label>Durée (mois) :</label>
-            <input type="number" id="duree" min="1" required style="width:100%;">
+            <input type="number" id="duree" min="1" required style="width:100%;" placeholder="Durée en mois">
           </div>
           <div>
             <label>Date de début :</label>
-            <input type="date" id="date_demande" required style="width:100%;">
+            <input type="date" id="date_demande" required style="width:100%;" placeholder="Date de début du prêt">
           </div>
           <!-- <div>
             <label>Agent :</label>

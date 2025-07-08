@@ -33,24 +33,24 @@ if (!isset($_SESSION['user'])) {
       <form id="typePretForm" onsubmit="ajouterTypePret(event)" style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:end;max-width:700px;margin:0 auto 2rem auto;">
         <div>
           <label for="nom">Nom du type de prêt</label>
-          <input type="text" id="nom" name="nom" required style="width:100%;">
+          <input type="text" id="nom" name="nom" required style="width:100%;" placeholder="Nom du type de prêt">
         </div>
         <div>
           <label for="taux">Taux d’intérêt annuel (%)</label>
-          <input type="number" id="taux" name="taux" step="0.01" min="0.01" max="100" required style="width:100%;">
+          <input type="number" id="taux" name="taux" step="0.01" min="0.01" max="100" required style="width:100%;" placeholder="Taux annuel (%)">
         </div>
 
         <div>
           <label for="duree">Durée maximale (en mois)</label>
-          <input type="number" id="duree" name="duree" min="1" required style="width:100%;">
+          <input type="number" id="duree" name="duree" min="1" required style="width:100%;" placeholder="Durée maximale (mois)">
         </div>
         <div>
           <label for="montant_min">Montant minimum (Ar)</label>
-          <input type="number" id="montant_min" name="montant_min" min="1000" required style="width:100%;">
+          <input type="number" id="montant_min" name="montant_min" min="1000" required style="width:100%;" placeholder="Montant minimum (Ar)">
         </div>
         <div>
           <label for="montant_max">Montant maximum (Ar)</label>
-          <input type="number" id="montant_max" name="montant_max" min="1000" required style="width:100%;">
+          <input type="number" id="montant_max" name="montant_max" min="1000" required style="width:100%;" placeholder="Montant maximum (Ar)">
         </div>
         <div style="display:flex;align-items:end;height:100%;grid-column:span 2;">
           <button type="submit" style="width:100%;">Créer</button>

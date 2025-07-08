@@ -13,23 +13,23 @@
       <form onsubmit="ajouterClient(event)" style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:end;max-width:900px;margin:0 auto 2rem auto;">
         <div>
           <label>Nom:</label><br>
-          <input type="text" id="nom" name="nom" required style="width:100%;">
+          <input type="text" id="nom" name="nom" required style="width:100%;" placeholder="Nom du client">
         </div>
         <div>
           <label>Prénom:</label><br>
-          <input type="text" id="prenom" name="prenom" required style="width:100%;">
+          <input type="text" id="prenom" name="prenom" required style="width:100%;" placeholder="Prénom du client">
         </div>
         <div>
           <label>Date de naissance:</label><br>
-          <input type="date" id="date_naissance" name="date_naissance" required style="width:100%;">
+          <input type="date" id="date_naissance" name="date_naissance" required style="width:100%;" placeholder="Date de naissance">
         </div>
         <div>
           <label>Email:</label><br>
-          <input type="email" id="email" name="email" style="width:100%;">
+          <input type="email" id="email" name="email" style="width:100%;" placeholder="Adresse email">
         </div>
         <div>
           <label>Téléphone:</label><br>
-          <input type="text" id="telephone" name="telephone" style="width:100%;">
+          <input type="text" id="telephone" name="telephone" style="width:100%;" placeholder="Numéro de téléphone">
         </div>
         <div style="display:flex;align-items:end;height:100%;">
           <button type="submit" style="width:100%;">Ajouter</button>

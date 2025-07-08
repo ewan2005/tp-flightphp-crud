@@ -31,7 +31,7 @@
       </div>
       <div>
         <label for="annee_debut">Année début:</label>
-        <input type="number" min="2000" max="2100" id="annee_debut" required>
+        <input type="number" min="2000" max="2100" id="annee_debut" required placeholder="Année de début">
       </div>
       <div>
         <label for="mois_fin">Mois fin:</label>
@@ -52,7 +52,7 @@
       </div>
       <div>
         <label for="annee_fin">Année fin:</label>
-        <input type="number" min="2000" max="2100" id="annee_fin" required>
+        <input type="number" min="2000" max="2100" id="annee_fin" required placeholder="Année de fin">
       </div>
       <div style="min-width:180px;flex:1 1 180px;">
         <button type="submit">Filtrer</button>
