@@ -84,6 +84,21 @@ CREATE TABLE ef_echeance_pret (
 
 ALTER TABLE ef_echeance_pret ADD COLUMN assurance DOUBLE DEFAULT 0;
 
+CREATE TABLE simulation (
+    id_simulation INT AUTO_INCREMENT PRIMARY KEY,
+    id_utilisateur INT,
+    montant DECIMAL(15,2),
+    duree INT,
+    taux_annuel DECIMAL(5,2),
+    taux_assurance DECIMAL(5,2),
+    mensualite DECIMAL(15,2),
+    mensualite_assurance DECIMAL(15,2),
+    mensualite_totale DECIMAL(15,2),
+    cout_total DECIMAL(15,2),
+    date_simulation DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_utilisateur) REFERENCES ef_utilisateur(id_utilisateur)
+);
+
 
 CREATE TABLE remboursement (
     id_remboursement INT PRIMARY KEY AUTO_INCREMENT,
@@ -134,6 +149,8 @@ CREATE TABLE ef_echeancier (
     montant DECIMAL(15,2) NOT NULL,
     FOREIGN KEY (id_pret) REFERENCES ef_pret(id_pret)
 );
+
+
 
 -- 9. INSERTION DE STATUTS PAR DÉFAUT
 INSERT INTO ef_statut (libelle) VALUES

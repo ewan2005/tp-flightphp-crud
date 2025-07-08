@@ -15,6 +15,23 @@ class Pret {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    public static function createSimulation($data) {
+        $db = getDB();
+        $stmt = $db->prepare("INSERT INTO simulation (id_utilisateur, montant, duree, taux_annuel, taux_assurance, mensualite, mensualite_assurance, mensualite_totale, cout_total) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $data->id_utilisateur,
+            $data->montant,
+            $data->duree,
+            $data->taux_annuel,
+            $data->taux_assurance,
+            $data->mensualite,
+            $data->mensualite_assurance,
+            $data->mensualite_totale,
+            $data->cout_total
+        ]);
+        return $db->lastInsertId();
+    }
+
     public static function create($data) {
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO ef_pret (id_client, id_type_pret, montant, duree, date_demande, id_statut, id_agent,assurance,delai_premier_remboursement ) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)");
