@@ -251,36 +251,56 @@ function ajouterOuModifierPret() {
     assurance
   };
 
-  function afficherEcheancier(echeancier) {
-    if (!echeancier || echeancier.length === 0) { echeancierDiv.innerHTML = ""; return; }
-    let html = '<h4>Échéancier prévisionnel</h4><table border="1"><tr><th>#</th><th>Date</th><th>Montant</th></tr>';
-    echeancier.forEach(e => {
-      html += `<tr><td>${e.numero}</td><td>${e.date}</td><td>${e.montant} Ar</td></tr>`;
-    });
-    html += '</table>';
-    echeancierDiv.innerHTML = html;
-  }
+  const xhr = new XMLHttpRequest();
+  const url = id ? `/prets/${id}` : "/prets";
+  const method = id ? "PUT" : "POST";
 
-  if (id) {
-    ajax("PUT", `/prets/${id}`, data, (res) => {
-      afficherMessage(res.message || "Prêt modifié", res.success ? "success" : "error");
-      resetFormPret();
-      chargerPrets();
-      echeancierDiv.innerHTML = "";
-    });
-  } else {
-    ajax("POST", "/prets", data, (res) => {
+  xhr.open(method, apiBase + url, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      const res = JSON.parse(xhr.responseText);
       if (res.success) {
         afficherMessage(res.message, "success");
-        afficherEcheancier(res.echeancier);
+        if (res.echeancier) {
+          afficherEcheancier(res.echeancier);
+        }
         resetFormPret();
         chargerPrets();
       } else {
-        afficherMessage(res.message || 'Erreur lors de la création du prêt', "error");
-        afficherEcheancier(res.echeancier);
+        afficherMessage(res.message, "error");
       }
-    });
+    } else {
+      try {
+        const errorResponse = JSON.parse(xhr.responseText);
+        afficherMessage(errorResponse.message || "Une erreur est survenue", "error");
+      } catch (e) {
+        afficherMessage("Erreur lors de la communication avec le serveur", "error");
+      }
+    }
+  };
+
+  xhr.onerror = function() {
+    afficherMessage("Erreur réseau - Impossible de contacter le serveur", "error");
+  };
+
+  xhr.send(JSON.stringify(data));
+}
+
+function afficherEcheancier(echeancier) {
+  const echeancierDiv = document.getElementById("echeancier");
+  if (!echeancier || echeancier.length === 0) { 
+    echeancierDiv.innerHTML = ""; 
+    return; 
   }
+  
+  let html = '<h4>Échéancier prévisionnel</h4><table border="1"><tr><th>#</th><th>Date</th><th>Montant</th></tr>';
+  echeancier.forEach(e => {
+    html += `<tr><td>${e.numero}</td><td>${e.date}</td><td>${e.montant} Ar</td></tr>`;
+  });
+  html += '</table>';
+  echeancierDiv.innerHTML = html;
 }
 
 function remplirFormPret(p) {

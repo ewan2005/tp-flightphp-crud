@@ -33,6 +33,10 @@ class PretController {
             Flight::json(['success'=>false, 'message'=>'Fonds insuffisants dans l\'établissement'], 400);
             return;
         }
+
+        if ($data -> duree > $typePret['duree_max']){
+            Flight::json(['success'=>false,'message'=>'duree ne peut pas etre superieur au max'],400);
+        }
         // 4. Créer le prêt
         $id = Pret::create($data);
         // 5. Débiter l'établissement
