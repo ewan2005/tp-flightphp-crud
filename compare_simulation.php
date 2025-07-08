@@ -34,7 +34,7 @@
 <body>
   <?php include('sidebar.php'); ?>
   <section class="main-section">
-    <h2>Comparaison Simulation Prêt</h2>
+    <h2>Comparaison Simulation Prêt(les Simulation enregistrer doivent etre sup 2)</h2>
     <div class="simulation-list">
       <div class="simulation-column" id="liste1"></div>
       <div class="simulation-column" id="liste2"></div>

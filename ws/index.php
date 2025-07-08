@@ -11,6 +11,8 @@ require 'routes/agent_routes.php';
 require 'routes/client_routes.php';
 require 'routes/interet_routes.php';
 require 'routes/simulation_routes.php';
+require 'routes/CompSimulation.php';
+
 // ini_set('display_errors', 1);
 // ini_set('display_startup_errors', 1);
 // error_reporting(E_ALL);
