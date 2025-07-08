@@ -12,7 +12,7 @@ INSERT INTO ef_pret (id_pret, id_client, id_type_pret, montant, duree, date_dema
 (3, 3, 1, 1500000, 18, '2025-03-20', 2, 2),
 (4, 1, 2, 1200000, 12, '2025-04-05', 2, 3);
 
-
+INSERT INTO ef_etablissement_financier (id_etablissement, nom, solde) VALUES (1, 'Banque Test', 10000000);
 
 INSERT INTO ef_client (id_client, nom, prenom) VALUES
 (1, 'Randria', 'Jean'),

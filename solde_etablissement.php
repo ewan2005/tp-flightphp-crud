@@ -73,7 +73,9 @@ session_start(); if (!isset($_SESSION['user'])) { header('Location: login.php');
   </table>
 </section>
 <script>
-const apiBase = "ws";
+    
+const apiBase = "http://localhost/tp-flightphp-crud/ws";
+
 function ajax(method, url, data, callback) {
   const xhr = new XMLHttpRequest();
   xhr.open(method, apiBase + url, true);
