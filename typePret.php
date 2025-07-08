@@ -27,8 +27,7 @@ if (!isset($_SESSION['user'])) {
 <body>
 
     <?php include('sidebar.php'); ?>
-    <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
-    <div class="main-section" style="max-width:900px;width:95vw;min-height:60vh;">
+    <section class="main-section" style="margin:2rem auto;max-width:1200px;width:95vw;">
       <h2>Créer un Type de Prêt</h2>
       <div id="message"></div>
       <form id="typePretForm" onsubmit="ajouterTypePret(event)" style="width:100%;display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:end;max-width:700px;margin:0 auto 2rem auto;">
@@ -40,7 +39,6 @@ if (!isset($_SESSION['user'])) {
           <label for="taux">Taux d’intérêt annuel (%)</label>
           <input type="number" id="taux" name="taux" step="0.01" min="0.01" max="100" required style="width:100%;" placeholder="Taux annuel (%)">
         </div>
-
         <div>
           <label for="duree">Durée maximale (en mois)</label>
           <input type="number" id="duree" name="duree" min="1" required style="width:100%;" placeholder="Durée maximale (mois)">
@@ -57,9 +55,7 @@ if (!isset($_SESSION['user'])) {
           <button type="submit" style="width:100%;">Créer</button>
         </div>
       </form>
-      <div>
       <h1>Liste des types pret</h1>
-
       <table id="type-pret">
             <thead>
             <tr>
@@ -68,10 +64,7 @@ if (!isset($_SESSION['user'])) {
           </thead>
           <tbody></tbody>
       </table>
-
-      </div>
-    </div>
-    <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
+    </section>
     <script>
         const apiBase = "http://localhost/tp-flightphp-crud/ws";
 

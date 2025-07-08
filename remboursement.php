@@ -17,8 +17,7 @@ $id = $_SESSION['user']['id_utilisateur'];
 </head>
 <body>
 <?php include('sidebar.php'); ?>
-<section class="section dashboard-section" style="margin-left: 260px;width:80%;">
-<div class="main-section">
+<section class="main-section">
     <h2>Remboursement</h2>
     <form id="remboursementForm">
         <div id="sectionUser" style="min-width:220px;flex:1 1 220px;"></div>
@@ -35,8 +34,7 @@ $id = $_SESSION['user']['id_utilisateur'];
           </thead>
         <tbody></tbody>
     </table>
-</div>
-<section class="section dashboard-section" style="margin-left: 260px;width:80%;">
+</section>
 <script>
 const apiBase = "http://localhost/tp-flightphp-crud/ws";
 

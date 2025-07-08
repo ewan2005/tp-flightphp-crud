@@ -17,21 +17,20 @@ if ($_SESSION['user']['role'] !== 'admin') {
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-<section class="section dashboard-section" style="margin-left: 260px;width:80%;">
-    <div class="main-section" style="max-width:1100px;width:95vw;min-height:70vh;">
-      <h2>Validation des Prêts (Admin)</h2>
-      <?php include('sidebar.php'); ?>
-      <table border="1" id="table-prets-validation" class="table-centered" style="margin-top:2rem;">
-        <thead>
-          <tr>
-            <th>ID</th><th>Client</th><th>Type</th><th>Montant</th><th>Durée</th><th>Date</th><th>Statut</th><th>Agent</th><th>Actions</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    <div id="result"></div>
-    <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
-      <script>
+<section class="main-section" style="margin-left: 260px;width:80%;">
+  <h2>Validation des Prêts (Admin)</h2>
+  <?php include('sidebar.php'); ?>
+  <table border="1" id="table-prets-validation" class="table-centered" style="margin-top:2rem;">
+    <thead>
+      <tr>
+        <th>ID</th><th>Client</th><th>Type</th><th>Montant</th><th>Durée</th><th>Date</th><th>Statut</th><th>Agent</th><th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <div id="result"></div>
+</section>
+<script>
 const apiBase = "http://localhost/tp-flightphp-crud/ws";
 
 function ajax(method, url, data, callback, isJson = false) {
@@ -105,7 +104,6 @@ function rejeterPret(id) {
 }
 
 chargerPretsValidation();
-      </script>
-    </div>
+</script>
 </body>
 </html>

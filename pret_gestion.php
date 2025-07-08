@@ -19,62 +19,54 @@ $user = $_SESSION['user'];
 </style>
 <body>
         <?php include('sidebar.php'); ?>
-        <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
-        <h2>Gestion des Prêts</h2>
-        <form id="pretForm" onsubmit="event.preventDefault(); ajouterOuModifierPret();" style="width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;align-items:end;max-width:900px;margin:0 auto 2rem auto;">
-          <input type="hidden" id="id_pret">
-          <div>
-            <label>Client :</label>
-            <select id="id_client" required style="width:100%;"></select>
-          </div>
-          <div>
-            <label for="type_pret">Type de prêt</label>
-            <select id="type_pret" name="type_pret" required style="width:100%;">
-              <option value="">Sélectionner un type de prêt</option>
-            </select>
-          </div>
-          <div>
-            <label>Montant :</label>
-            <input type="number" id="montant" step="0.01" min="0" required style="width:100%;" placeholder="Montant du prêt">
-          </div>
-          <div>
-            <label>Durée (mois) :</label>
-            <input type="number" id="duree" min="1" required style="width:100%;" placeholder="Durée en mois">
-          </div>
-          <div>
-            <label>Date de début :</label>
-            <input type="date" id="date_demande" required style="width:100%;" placeholder="Date de début du prêt">
-          </div>
-          <div>
-            <label>Assurance :</label>
-            <input type="number" id="assurance" step="0.01" min="0" required style="width:100%;">
-          </div>
-          <div>
-              <label>Délai avant 1er remboursement (mois) :</label>
-              <input type="number" id="delai_remboursement" min="0" value="0" style="width:100%;">
-          </div>
-          <!-- <div>
-            <label>Agent :</label>
-            <input type="text" id="agent" style="width:100%;">
-          </div> -->
-          <!-- <div style="display:flex;align-items:end;height:100%;grid-column:span 3;">
-            <button type="submit" style="width:100%;">Ajouter/Modifier</button>
-          </div> -->
-          <button type="button" onclick="simulerPret()">Simuler</button>
-        </form>
-        <div id="result" style="margin: 10px 0;"></div>
-        <div id="echeancier" style="margin:20px 0;"></div>
-        <h3>Liste des Prêts</h3>
-        <table border="1" id="table-prets">
-            <thead>
-                <tr>
-                    <th>ID</th><th>Client</th><th>Type</th><th>Montant</th><th>Durée</th><th>Date</th><th>Statut</th><th>Agent</th><th>Actions</th><th>taux</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <section class="section dashboard-section" style="margin-left: 260px;width:80%;">
-        <script>
+        <section class="main-section">
+          <h2>Gestion des Prêts</h2>
+          <form id="pretForm" onsubmit="event.preventDefault(); ajouterOuModifierPret();" style="width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;align-items:end;max-width:1100px;margin:0 auto 2rem auto;">
+            <input type="hidden" id="id_pret">
+            <div>
+              <label>Client :</label>
+              <select id="id_client" required style="width:100%;"></select>
+            </div>
+            <div>
+              <label for="type_pret">Type de prêt</label>
+              <select id="type_pret" name="type_pret" required style="width:100%;">
+                <option value="">Sélectionner un type de prêt</option>
+              </select>
+            </div>
+            <div>
+              <label>Montant :</label>
+              <input type="number" id="montant" step="0.01" min="0" required style="width:100%;" placeholder="Montant du prêt">
+            </div>
+            <div>
+              <label>Durée (mois) :</label>
+              <input type="number" id="duree" min="1" required style="width:100%;" placeholder="Durée en mois">
+            </div>
+            <div>
+              <label>Date de début :</label>
+              <input type="date" id="date_demande" required style="width:100%;" placeholder="Date de début du prêt">
+            </div>
+            <div>
+              <label>Assurance :</label>
+              <input type="number" id="assurance" step="0.01" min="0" required style="width:100%;">
+            </div>
+            <div>
+                <label>Délai avant 1er remboursement (mois) :</label>
+                <input type="number" id="delai_remboursement" min="0" value="0" style="width:100%;">
+            </div>
+            <button type="button" onclick="simulerPret()">Simuler</button>
+          </form>
+          <div id="result" style="margin: 10px 0;"></div>
+          <div id="echeancier" style="margin:20px 0;"></div>
+          <h3>Liste des Prêts</h3>
+          <table border="1" id="table-prets">
+              <thead>
+                  <tr>
+                      <th>ID</th><th>Client</th><th>Type</th><th>Montant</th><th>Durée</th><th>Date</th><th>Statut</th><th>Agent</th><th>Actions</th><th>taux</th>
+                  </tr>
+              </thead>
+              <tbody></tbody>
+          </table>
+          <script>
 const apiBase = "http://localhost/tp-flightphp-crud/ws";
 
 function ajax(method, url, data, callback) {
